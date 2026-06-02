@@ -44,10 +44,10 @@ INGREDIENT_KEYWORDS = [
 
 def run_actor(actor_id, input_data, timeout=120, memory=512):
     params = {"token": APIFY_TOKEN}
+    actor_id_safe = actor_id.replace("/", "~")
     try:
-        actor_id_safe = actor_id.replace("/", "~")
-run_resp = requests.post(
-    f"{BASE}/acts/{actor_id_safe}/runs",
+        run_resp = requests.post(
+            f"{BASE}/acts/{actor_id_safe}/runs",
             json={**input_data, "memory": memory},
             params=params, timeout=30
         )

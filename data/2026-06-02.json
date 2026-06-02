@@ -1,10 +1,10 @@
 {
   "date": "2026-06-02",
-  "generated_at": "2026-06-02T04:57:40.588573+00:00",
+  "generated_at": "2026-06-02T05:14:10.499689+00:00",
   "summary": {
     "total_keywords": 5,
     "platforms": 6,
-    "where_to_buy_search": 1000
+    "where_to_buy_search": 8300
   },
   "platforms": {
     "instagram": {
@@ -55,7 +55,7 @@
       {
         "platform": "google_trends",
         "keyword": "korean skincare",
-        "interest": 53
+        "interest": 54
       },
       {
         "platform": "google_trends",

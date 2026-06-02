@@ -1,0 +1,41 @@
+{
+  "date": "2026-06-02",
+  "generated_at": "2026-06-02T00:00:00Z",
+  "summary": {
+    "total_keywords": 48,
+    "platforms": 6,
+    "where_to_buy_search": 8300
+  },
+  "platforms": {
+    "instagram": {
+      "total": 120,
+      "top_hashtags": ["kbeauty", "koreanfashion", "koreanskincare", "seoullife", "dutyfree", "kpopstyle"]
+    },
+    "tiktok": {
+      "total": 50,
+      "top_keywords": ["kbeauty", "korean skincare", "grwm korean", "kpop style", "haul"]
+    },
+    "google_trends": {
+      "total": 5,
+      "keywords": ["korean skincare", "k-beauty brands", "cica cream", "duty free korea", "where to buy korean skincare"]
+    }
+  },
+  "brands": [
+    {"name": "anua", "score": 420},
+    {"name": "cosrx", "score": 380},
+    {"name": "beauty of joseon", "score": 290},
+    {"name": "laneige", "score": 210},
+    {"name": "tamburins", "score": 180},
+    {"name": "round lab", "score": 140},
+    {"name": "skin1004", "score": 120},
+    {"name": "mardi mercredi", "score": 90}
+  ],
+  "ingredients": [
+    {"name": "centella", "score": 210},
+    {"name": "niacinamide", "score": 145},
+    {"name": "snail mucin", "score": 98},
+    {"name": "bakuchiol", "score": 88},
+    {"name": "azelaic acid", "score": 65},
+    {"name": "ceramide", "score": 41}
+  ]
+}

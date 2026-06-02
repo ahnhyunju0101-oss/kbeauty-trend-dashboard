@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>K-Beauty Trend Dashboard</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8f8f6; color: #1a1a1a; }
+  .header { background: #1a1a1a; color: white; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
+  .header-title { font-size: 16px; font-weight: 500; }
+  .header-date { font-size: 12px; opacity: 0.6; }
+  .nav { display: flex; background: white; border-bottom: 1px solid #eee; padding: 0 24px; }
+  .nav-btn { padding: 12px 16px; font-size: 13px; font-weight: 500; color: #888; background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; }
+  .nav-btn.active { color: #1a1a1a; border-bottom-color: #1a1a1a; }
+  .page { display: none; padding: 24px; max-width: 1100px; margin: 0 auto; }
+  .page.active { display: block; }
+  .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 20px; }
+  .metric { background: white; border-radius: 10px; padding: 14px 16px; border: 1px solid #eee; }
+  .metric-label { font-size: 11px; color: #888; margin-bottom: 4px; }
+  .metric-val { font-size: 22px; font-weight: 600; color: #1a1a1a; }
+  .metric-sub { font-size: 10px; color: #bbb; margin-top: 2px; }
+  .section-title { font-size: 12px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; margin-top: 20px; }
+  .divider { border: none; border-top: 1px solid #eee; margin: 20px 0; }
+  .platform-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 20px; }
+  .platform-card { background: white; border: 1px solid #eee; border-radius: 10px; padding: 12px 14px; }
+  .platform-name { font-size: 13px; font-weight: 500; margin-bottom: 8px; }
+  .tag-list { display: flex; flex-wrap: wrap; gap: 4px; }
+  .tag { font-size: 10px; padding: 2px 8px; border-radius: 20px; }
+  .tag-hot { background: #fdecea; color: #c0392b; }
+  .tag-rising { background: #e8f5e9; color: #27ae60; }
+  .tag-new { background: #ede7f6; color: #5e35b1; }
+  .tag-amazon { background: #fff8e1; color: #f57f17; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+  .box { background: white; border: 1px solid #eee; border-radius: 10px; overflow: hidden; }
+  .box-header { padding: 10px 14px; border-bottom: 1px solid #eee; font-size: 12px; font-weight: 500; color: #888; }
+  .box-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 14px; border-bottom: 1px solid #f5f5f5; font-size: 13px; }
+  .box-row:last-child { border-bottom: none; }
+  .brand-name { font-weight: 500; text-transform: capitalize; }
+  .brand-score { color: #27ae60; font-weight: 500; font-size: 12px; }
+  .ing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin-bottom: 20px; }
+  .ing-card { background: white; border: 1px solid #eee; border-radius: 10px; padding: 10px 12px; }
+  .ing-name { font-size: 12px; font-weight: 500; margin-bottom: 6px; text-transform: capitalize; }
+  .ing-bar-wrap { height: 4px; background: #f0f0f0; border-radius: 2px; margin-bottom: 4px; }
+  .ing-bar { height: 100%; border-radius: 2px; background: #3b82f6; }
+  .ing-score { font-size: 11px; color: #888; }
+  /* CALENDAR */
+  .cal-search-wrap { display: flex; gap: 8px; margin-bottom: 6px; }
+  .cal-input { flex: 1; padding: 9px 12px; font-size: 13px; border: 1px solid #eee; border-radius: 8px; background: white; outline: none; }
+  .cal-input:focus { border-color: #1a1a1a; }
+  .cal-btn { padding: 9px 16px; font-size: 13px; font-weight: 500; border: none; border-radius: 8px; background: #1a1a1a; color: white; cursor: pointer; }
+  .cal-hint { font-size: 11px; color: #bbb; margin-bottom: 16px; }
+  .cal-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .cal-nav-title { font-size: 15px; font-weight: 600; }
+  .cal-nav-btn { padding: 6px 14px; font-size: 12px; border: 1px solid #eee; border-radius: 6px; background: white; cursor: pointer; }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 16px; }
+  .cal-day-label { text-align: center; font-size: 11px; color: #bbb; padding: 4px 0; font-weight: 500; }
+  .cal-cell { aspect-ratio: 1; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; border: 1px solid transparent; transition: all 0.1s; }
+  .cal-cell.has-data { background: white; border-color: #eee; }
+  .cal-cell.has-data:hover { border-color: #1a1a1a; }
+  .cal-cell.today { border-color: #1a1a1a; }
+  .cal-cell.selected { background: #1a1a1a !important; border-color: #1a1a1a; }
+  .cal-cell.selected .cal-num { color: white; }
+  .cal-cell.selected .cal-dot { background: white; opacity: 0.6; }
+  .cal-cell.empty { cursor: default; pointer-events: none; }
+  .cal-num { font-size: 13px; font-weight: 500; color: #1a1a1a; }
+  .cal-cell.empty .cal-num { color: #ddd; }
+  .cal-dot { width: 5px; height: 5px; border-radius: 50%; background: #27ae60; margin-top: 2px; }
+  .cal-preview { background: white; border: 1px solid #eee; border-radius: 10px; padding: 16px; }
+  .cal-preview-date { font-size: 13px; font-weight: 600; margin-bottom: 12px; }
+  .cal-preview-row { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f5f5f5; }
+  .cal-preview-row:last-child { border-bottom: none; }
+  .cal-badge { font-size: 10px; padding: 2px 8px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; }
+  .cal-preview-text { font-size: 12px; color: #444; line-height: 1.5; }
+  .empty-state { text-align: center; padding: 2rem; color: #bbb; font-size: 13px; }
+  /* SEARCH */
+  .ks-input-row { display: flex; gap: 8px; margin-bottom: 6px; }
+  .ks-input { flex: 1; padding: 10px 14px; font-size: 14px; border: 1px solid #eee; border-radius: 8px; outline: none; }
+  .ks-input:focus { border-color: #1a1a1a; }
+  .ks-btn { padding: 10px 18px; font-size: 13px; font-weight: 500; border: none; border-radius: 8px; background: #1a1a1a; color: white; cursor: pointer; }
+  .ks-hint { font-size: 11px; color: #bbb; margin-bottom: 12px; }
+  .ks-suggestions { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+  .ks-suggestion { font-size: 11px; padding: 4px 10px; border-radius: 20px; border: 1px solid #eee; background: white; cursor: pointer; color: #555; }
+  .ks-suggestion:hover { border-color: #1a1a1a; }
+  .ks-filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+  .ks-filter { font-size: 11px; padding: 4px 10px; border-radius: 20px; border: 1px solid #eee; background: white; cursor: pointer; color: #888; }
+  .ks-filter.active { background: #1a1a1a; color: white; border-color: #1a1a1a; }
+  .ks-count { font-size: 12px; color: #888; margin-bottom: 10px; }
+  .ks-card { background: white; border: 1px solid #eee; border-radius: 10px; padding: 12px 14px; margin-bottom: 8px; }
+  .ks-card-top { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; }
+  .ks-card-type { font-size: 10px; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
+  .ks-card-date { font-size: 11px; color: #bbb; }
+  .ks-card-title { font-size: 13px; font-weight: 500; margin-bottom: 3px; }
+  .ks-card-desc { font-size: 12px; color: #666; line-height: 1.5; }
+  .ks-highlight { background: #fff3cd; border-radius: 2px; padding: 0 2px; font-weight: 500; }
+  .ks-empty { text-align: center; padding: 3rem; color: #bbb; font-size: 13px; }
+  .loading { text-align: center; padding: 2rem; color: #bbb; font-size: 13px; }
+  @media (max-width: 600px) {
+    .two-col { grid-template-columns: 1fr; }
+    .page { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-title">📊 K-Beauty Trend Dashboard</div>
+  <div class="header-date" id="headerDate">로딩 중...</div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="switchPage('dashboard', event)">📊 데일리 리포트</button>
+  <button class="nav-btn" onclick="switchPage('calendar', event)">📅 리포트 캘린더</button>
+  <button class="nav-btn" onclick="switchPage('search', event)">🔍 키워드 검색</button>
+</div>
+
+<!-- DASHBOARD -->
+<div id="page-dashboard" class="page active">
+  <div class="loading" id="dashLoading">데이터 로딩 중...</div>
+  <div id="dashContent" style="display:none;">
+    <div class="metric-grid" id="metricGrid"></div>
+    <div class="divider"></div>
+    <div class="section-title">플랫폼별 트렌드 키워드</div>
+    <div class="platform-grid" id="platformGrid"></div>
+    <div class="divider"></div>
+    <div class="section-title">뜨는 브랜드</div>
+    <div class="two-col">
+      <div class="box">
+        <div class="box-header">🔥 이번주 상위 브랜드</div>
+        <div id="brandList"></div>
+      </div>
+      <div class="box">
+        <div class="box-header">🧪 바이럴 성분</div>
+        <div id="ingredientList"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CALENDAR -->
+<div id="page-calendar" class="page">
+  <div class="cal-search-wrap">
+    <input class="cal-input" id="dateInput" type="text" placeholder="날짜 입력 — 예: 5/28 · 528 · 2026-05-28" maxlength="20" />
+    <button class="cal-btn" onclick="searchDate()">검색</button>
+  </div>
+  <div class="cal-hint">※ 형식: 2026-05-28 · 5/28 · 528 모두 가능 · 엔터키로 검색</div>
+  <div class="cal-nav">
+    <button class="cal-nav-btn" onclick="changeMonth(-1)">← 이전</button>
+    <div class="cal-nav-title" id="calTitle"></div>
+    <button class="cal-nav-btn" onclick="changeMonth(1)">다음 →</button>
+  </div>
+  <div class="cal-grid" id="calGrid"></div>
+  <div class="cal-preview" id="calPreview"><div class="empty-state">날짜를 선택하면 리포트 요약이 표시돼요</div></div>
+</div>
+
+<!-- SEARCH -->
+<div id="page-search" class="page">
+  <div class="ks-input-row">
+    <input class="ks-input" id="ksInput" type="text" placeholder="브랜드명, 성분, 인플루언서, 키워드 검색..." />
+    <button class="ks-btn" onclick="runSearch()">검색</button>
+  </div>
+  <div class="ks-hint">※ 예: Anua · Centella · Father's Day · glass skin · 구매처</div>
+  <div style="font-size:11px;color:#bbb;margin-bottom:8px;">추천 검색어</div>
+  <div class="ks-suggestions">
+    <span class="ks-suggestion" onclick="quickSearch('Anua')">Anua</span>
+    <span class="ks-suggestion" onclick="quickSearch('Cosrx')">Cosrx</span>
+    <span class="ks-suggestion" onclick="quickSearch('Centella')">Centella</span>
+    <span class="ks-suggestion" onclick="quickSearch('Tamburins')">Tamburins</span>
+    <span class="ks-suggestion" onclick="quickSearch('glass skin')">Glass Skin</span>
+    <span class="ks-suggestion" onclick="quickSearch('Father')">Father's Day</span>
+    <span class="ks-suggestion" onclick="quickSearch('구매처')">구매처 공백</span>
+    <span class="ks-suggestion" onclick="quickSearch('할랄')">할랄</span>
+    <span class="ks-suggestion" onclick="quickSearch('Niacinamide')">Niacinamide</span>
+  </div>
+  <div class="ks-filters">
+    <span class="ks-filter active" onclick="setFilter('all',this)">전체</span>
+    <span class="ks-filter" onclick="setFilter('brand',this)">브랜드</span>
+    <span class="ks-filter" onclick="setFilter('ingredient',this)">성분</span>
+    <span class="ks-filter" onclick="setFilter('signal',this)">시그널</span>
+    <span class="ks-filter" onclick="setFilter('gap',this)">구매처 공백</span>
+  </div>
+  <div id="ksResults"></div>
+</div>
+
+<script>
+// ── 데이터 로드 ──────────────────────────────────────────
+let latestData = null;
+let reportCache = {};
+let activeFilter = 'all';
+let calYear = new Date().getFullYear();
+let calMonth = new Date().getMonth();
+
+async function loadLatest() {
+  try {
+    const res = await fetch('data/latest.json?t=' + Date.now());
+    latestData = await res.json();
+    renderDashboard(latestData);
+    buildSearchIndex(latestData);
+  } catch(e) {
+    document.getElementById('dashLoading').textContent = '데이터 로드 실패 — 잠시 후 다시 시도해주세요';
+  }
+}
+
+async function loadReport(date) {
+  if (reportCache[date]) return reportCache[date];
+  try {
+    const res = await fetch(`data/${date}.json?t=` + Date.now());
+    if (!res.ok) return null;
+    const data = await res.json();
+    reportCache[date] = data;
+    return data;
+  } catch(e) { return null; }
+}
+
+// ── 대시보드 렌더링 ──────────────────────────────────────
+function renderDashboard(data) {
+  document.getElementById('dashLoading').style.display = 'none';
+  document.getElementById('dashContent').style.display = 'block';
+  document.getElementById('headerDate').textContent = data.date + ' · 자동 업데이트';
+
+  // 지표
+  const s = data.summary;
+  document.getElementById('metricGrid').innerHTML = `
+    <div class="metric"><div class="metric-label">수집 키워드</div><div class="metric-val">${s.total_keywords}</div><div class="metric-sub">${s.platforms}개 플랫폼</div></div>
+    <div class="metric"><div class="metric-label">"where to buy"</div><div class="metric-val">${(s.where_to_buy_search/1000).toFixed(1)}K</div><div class="metric-sub">주간 검색량</div></div>
+    <div class="metric"><div class="metric-label">TOP 브랜드</div><div class="metric-val">${data.brands.length}</div><div class="metric-sub">이번주 집계</div></div>
+    <div class="metric"><div class="metric-label">바이럴 성분</div><div class="metric-val">${data.ingredients.length}</div><div class="metric-sub">급상승 중</div></div>
+  `;
+
+  // 플랫폼 키워드
+  const p = data.platforms;
+  const platforms = [
+    { name: '📸 Instagram', tags: (p.instagram?.top_hashtags || []).map(t => ({text:'#'+t, cls:'tag-hot'})) },
+    { name: '🎵 TikTok', tags: (p.tiktok?.top_keywords || []).map(t => ({text:t, cls:'tag-rising'})) },
+    { name: '🔍 Google Trends', tags: (p.google_trends?.keywords || []).map(t => ({text:t, cls:'tag-new'})) },
+    { name: '📦 Amazon', tags: ['korean skin care','snail mucin','cica cream','korean sunscreen'].map(t=>({text:t,cls:'tag-amazon'})) },
+  ];
+  document.getElementById('platformGrid').innerHTML = platforms.map(pl => `
+    <div class="platform-card">
+      <div class="platform-name">${pl.name}</div>
+      <div class="tag-list">${pl.tags.map(t=>`<span class="tag ${t.cls}">${t.text}</span>`).join('')}</div>
+    </div>`).join('');
+
+  // 브랜드
+  const maxScore = Math.max(...data.brands.map(b=>b.score), 1);
+  document.getElementById('brandList').innerHTML = data.brands.map((b,i) => `
+    <div class="box-row">
+      <span class="brand-name">${i+1}. ${b.name}</span>
+      <span class="brand-score">${b.score > 0 ? '▲ ' + b.score : '신규'}</span>
+    </div>`).join('');
+
+  // 성분
+  const maxIng = Math.max(...data.ingredients.map(i=>i.score), 1);
+  document.getElementById('ingredientList').innerHTML = data.ingredients.map(ing => `
+    <div class="box-row" style="flex-direction:column;align-items:flex-start;gap:4px;">
+      <div style="display:flex;justify-content:space-between;width:100%;">
+        <span class="brand-name">${ing.name}</span>
+        <span class="brand-score">${ing.score}</span>
+      </div>
+      <div class="ing-bar-wrap" style="width:100%;margin:0;">
+        <div class="ing-bar" style="width:${Math.round(ing.score/maxIng*100)}%;"></div>
+      </div>
+    </div>`).join('');
+}
+
+// ── 캘린더 ───────────────────────────────────────────────
+function renderCalendar() {
+  const months = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+  document.getElementById('calTitle').textContent = `${calYear}년 ${months[calMonth]}`;
+  const grid = document.getElementById('calGrid');
+  grid.innerHTML = '';
+  ['일','월','화','수','목','금','토'].forEach(d => {
+    const el = document.createElement('div');
+    el.className = 'cal-day-label';
+    el.textContent = d;
+    grid.appendChild(el);
+  });
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+  const today = new Date();
+  for (let i = 0; i < firstDay; i++) {
+    const el = document.createElement('div');
+    el.className = 'cal-cell empty';
+    el.innerHTML = '<div class="cal-num"></div>';
+    grid.appendChild(el);
+  }
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday = today.getFullYear()===calYear && today.getMonth()===calMonth && today.getDate()===d;
+    const el = document.createElement('div');
+    el.className = 'cal-cell' + (isToday ? ' today' : '');
+    el.dataset.day = d;
+    el.dataset.date = dateStr;
+    el.innerHTML = `<div class="cal-num">${d}</div>`;
+    el.onclick = () => selectDate(dateStr, el);
+    // 데이터 있는지 확인 (latest 날짜 기준)
+    if (latestData && dateStr <= latestData.date) {
+      el.classList.add('has-data');
+      el.innerHTML += '<div class="cal-dot"></div>';
+    }
+    grid.appendChild(el);
+  }
+}
+
+async function selectDate(dateStr, el) {
+  document.querySelectorAll('.cal-cell').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  const data = await loadReport(dateStr);
+  const preview = document.getElementById('calPreview');
+  if (!data) {
+    const d = new Date(dateStr);
+    preview.innerHTML = `
+      <div class="cal-preview-date">${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일</div>
+      <div class="empty-state">📭 이 날짜의 리포트가 없어요<br><span style="font-size:11px;">Apify 연동 후 자동 수집된 날부터 쌓여요!</span></div>`;
+    return;
+  }
+  const d = new Date(dateStr);
+  const topBrand = data.brands[0] ? data.brands[0].name : '-';
+  const topIng = data.ingredients[0] ? data.ingredients[0].name : '-';
+  preview.innerHTML = `
+    <div class="cal-preview-date">${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 리포트 요약</div>
+    <div class="cal-preview-row"><span class="cal-badge" style="background:#fdecea;color:#c0392b;">브랜드</span><div class="cal-preview-text">TOP — ${topBrand}</div></div>
+    <div class="cal-preview-row"><span class="cal-badge" style="background:#fff8e1;color:#f57f17;">성분</span><div class="cal-preview-text">TOP — ${topIng}</div></div>
+    <div class="cal-preview-row"><span class="cal-badge" style="background:#e8f5e9;color:#27ae60;">키워드</span><div class="cal-preview-text">${data.summary.total_keywords}개 수집 · ${data.summary.platforms}개 플랫폼</div></div>`;
+}
+
+function parseInput(raw) {
+  const s = raw.trim().replace(/[－—]/g, '-');
+  let m;
+  m = s.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})$/);
+  if (m) return { y:+m[1], mo:+m[2], d:+m[3] };
+  m = s.match(/^(\d{1,2})[-\/](\d{1,2})$/);
+  if (m) return { y:new Date().getFullYear(), mo:+m[1], d:+m[2] };
+  m = s.match(/^(\d{2})(\d{2})$/);
+  if (m) return { y:new Date().getFullYear(), mo:+m[1], d:+m[2] };
+  m = s.match(/^(\d{1})(\d{2})$/);
+  if (m) return { y:new Date().getFullYear(), mo:+m[1], d:+m[2] };
+  return null;
+}
+
+function searchDate() {
+  const parsed = parseInput(document.getElementById('dateInput').value);
+  if (!parsed) return;
+  calYear = parsed.y; calMonth = parsed.mo - 1;
+  renderCalendar();
+  setTimeout(() => {
+    const dateStr = `${parsed.y}-${String(parsed.mo).padStart(2,'0')}-${String(parsed.d).padStart(2,'0')}`;
+    const cells = document.querySelectorAll('.cal-cell');
+    cells.forEach(cell => {
+      if (cell.dataset.date === dateStr) {
+        selectDate(dateStr, cell);
+        cell.classList.add('selected');
+      }
+    });
+  }, 100);
+}
+
+function changeMonth(dir) {
+  calMonth += dir;
+  if (calMonth > 11) { calMonth = 0; calYear++; }
+  if (calMonth < 0) { calMonth = 11; calYear--; }
+  document.getElementById('calPreview').innerHTML = '<div class="empty-state">날짜를 선택하면 리포트 요약이 표시돼요</div>';
+  renderCalendar();
+}
+
+document.getElementById('dateInput').addEventListener('keydown', e => { if(e.key==='Enter') searchDate(); });
+
+// ── 키워드 검색 ──────────────────────────────────────────
+const searchIndex = [
+  { type:'brand', date:'2026-06-02', title:'Anua', desc:'스킨케어 · +38% · 미주/유럽 구매처 공백 · 병풀 함유', tags:['anua','스킨케어','급상승','미주','유럽','구매처'] },
+  { type:'brand', date:'2026-06-02', title:'Cosrx', desc:'스킨케어 · 8주 연속 스테디 · 아마존 리뷰 +1.2K', tags:['cosrx','스테디','아마존','snail mucin'] },
+  { type:'brand', date:'2026-06-02', title:'Beauty of Joseon', desc:'스킨케어 · 5주 연속 · 선크림 바이럴', tags:['beauty of joseon','선크림','spf','스테디'] },
+  { type:'brand', date:'2026-06-02', title:'Tamburins', desc:'향수 · +67% · 중동 구매처 공백', tags:['tamburins','향수','럭셔리','급상승','중동'] },
+  { type:'brand', date:'2026-06-02', title:'Laneige', desc:'스킨케어 · 6주 연속 · 할랄 인증 71%', tags:['laneige','할랄','스테디','수분'] },
+  { type:'brand', date:'2026-06-02', title:'Mardi Mercredi', desc:'패션 · +52% 신규진입', tags:['mardi mercredi','패션','신규','급상승'] },
+  { type:'brand', date:'2026-06-02', title:'Skin1004', desc:'미주 "where to buy" 월 4.1K · 공식몰 없음', tags:['skin1004','구매처','공백','미주'] },
+  { type:'ingredient', date:'2026-06-02', title:'Centella (병풀)', desc:'TikTok + YouTube 바이럴 · +210% · Anua/Purito 연동', tags:['centella','병풀','cica','바이럴'] },
+  { type:'ingredient', date:'2026-06-02', title:'Niacinamide', desc:'TikTok 루틴 콘텐츠 확산 · +45% · 동남아 +91%', tags:['niacinamide','나이아신아마이드','미백'] },
+  { type:'ingredient', date:'2026-06-02', title:'Snail Mucin', desc:'Cosrx 바이럴 연동 · +22%', tags:['snail mucin','달팽이','cosrx'] },
+  { type:'ingredient', date:'2026-06-02', title:'Bakuchiol', desc:'레티놀 대안 기사 트리거 · +88%', tags:['bakuchiol','바쿠치올','레티놀'] },
+  { type:'signal', date:'2026-06-02', title:"Father's Day (미국)", desc:'D-14 · 남성 그루밍 + 선물세트 검색 급증', tags:['fathers day','파더스데이','시즌','선물'] },
+  { type:'signal', date:'2026-06-02', title:'Glass Skin 트렌드', desc:'Vogue 기사 이후 IG·TikTok 재점화 · 2주째', tags:['glass skin','글래스스킨','트렌드','바이럴'] },
+  { type:'signal', date:'2026-06-02', title:'NYT K-beauty 기사', desc:'"K-beauty cheaper in Korea" · 직구 관심 주간 최고치', tags:['nyt','기사','미디어','직구'] },
+  { type:'gap', date:'2026-06-02', title:'Skin1004 — 미주 공백', desc:'"where to buy skin1004 us" 월 4.1K · 글로벌 몰 없음', tags:['skin1004','미주','구매처','공백'] },
+  { type:'gap', date:'2026-06-02', title:'Anua — 유럽/중동 공백', desc:'"anua uk/saudi" 월 4.1K · 공식 유통 없음', tags:['anua','유럽','중동','구매처','공백'] },
+  { type:'gap', date:'2026-06-02', title:'Tamburins — 중동 공백', desc:'"tamburins uae" 월 1.4K · 럭셔리 포지션', tags:['tamburins','중동','구매처','공백','uae'] },
+];
+
+const typeStyles = {
+  brand: { bg:'#fdecea', color:'#c0392b', label:'브랜드' },
+  ingredient: { bg:'#fff8e1', color:'#f57f17', label:'성분' },
+  signal: { bg:'#e8f5e9', color:'#27ae60', label:'시그널' },
+  gap: { bg:'#e8f5e9', color:'#1a6e45', label:'구매처 공백' },
+};
+
+function buildSearchIndex(data) {
+  // 실제 데이터로 인덱스 보강
+  data.brands.forEach(b => {
+    if (!searchIndex.find(s => s.title.toLowerCase() === b.name)) {
+      searchIndex.push({ type:'brand', date:data.date, title:b.name, desc:`트렌드 스코어 ${b.score}`, tags:[b.name.toLowerCase()] });
+    }
+  });
+}
+
+function setFilter(f, el) {
+  activeFilter = f;
+  document.querySelectorAll('.ks-filter').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  if (document.getElementById('ksInput').value.trim()) runSearch();
+}
+
+function quickSearch(q) {
+  document.getElementById('ksInput').value = q;
+  runSearch();
+}
+
+function highlight(text, q) {
+  if (!q) return text;
+  const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+  return text.replace(re, '<span class="ks-highlight">$1</span>');
+}
+
+function runSearch() {
+  const raw = document.getElementById('ksInput').value.trim().toLowerCase();
+  const el = document.getElementById('ksResults');
+  if (!raw) { el.innerHTML = ''; return; }
+
+  let results = searchIndex.filter(item => {
+    const matchFilter = activeFilter === 'all' || item.type === activeFilter;
+    const matchQuery = item.tags.some(t => t.includes(raw)) || item.title.toLowerCase().includes(raw) || item.desc.toLowerCase().includes(raw);
+    return matchFilter && matchQuery;
+  }).sort((a,b) => b.date.localeCompare(a.date));
+
+  if (!results.length) {
+    el.innerHTML = `<div class="ks-empty">🔍 "<strong>${raw}</strong>" 검색 결과가 없어요</div>`;
+    return;
+  }
+
+  el.innerHTML = `<div class="ks-count"><strong>${results.length}개</strong> 결과 — "${raw}"</div>` +
+    results.map(item => {
+      const s = typeStyles[item.type];
+      const d = new Date(item.date);
+      return `<div class="ks-card">
+        <div class="ks-card-top">
+          <span class="ks-card-type" style="background:${s.bg};color:${s.color};">${s.label}</span>
+          <span class="ks-card-date">${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일</span>
+        </div>
+        <div class="ks-card-title">${highlight(item.title, raw)}</div>
+        <div class="ks-card-desc">${highlight(item.desc, raw)}</div>
+      </div>`;
+    }).join('');
+}
+
+document.getElementById('ksInput').addEventListener('keydown', e => { if(e.key==='Enter') runSearch(); });
+document.getElementById('ksInput').addEventListener('input', e => { if(e.target.value.trim().length >= 2) runSearch(); });
+
+// ── 페이지 전환 ──────────────────────────────────────────
+function switchPage(page, event) {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  event.target.closest('.nav-btn').classList.add('active');
+  document.getElementById('page-' + page).classList.add('active');
+  if (page === 'calendar') renderCalendar();
+}
+
+// ── 초기화 ───────────────────────────────────────────────
+loadLatest();
+</script>
+</body>
+</html>

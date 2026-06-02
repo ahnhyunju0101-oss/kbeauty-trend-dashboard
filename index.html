@@ -5,139 +5,332 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>K-Beauty Trend Dashboard</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8f8f6; color: #1a1a1a; }
-  .header { background: #1a1a1a; color: white; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
-  .header-title { font-size: 16px; font-weight: 500; }
-  .header-date { font-size: 12px; opacity: 0.6; }
-  .nav { display: flex; background: white; border-bottom: 1px solid #eee; padding: 0 24px; }
-  .nav-btn { padding: 12px 16px; font-size: 13px; font-weight: 500; color: #888; background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; }
-  .nav-btn.active { color: #1a1a1a; border-bottom-color: #1a1a1a; }
-  .page { display: none; padding: 24px; max-width: 1100px; margin: 0 auto; }
-  .page.active { display: block; }
-  .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 20px; }
-  .metric { background: white; border-radius: 10px; padding: 14px 16px; border: 1px solid #eee; }
-  .metric-label { font-size: 11px; color: #888; margin-bottom: 4px; }
-  .metric-val { font-size: 22px; font-weight: 600; color: #1a1a1a; }
-  .metric-sub { font-size: 10px; color: #bbb; margin-top: 2px; }
-  .section-title { font-size: 12px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; margin-top: 20px; }
-  .divider { border: none; border-top: 1px solid #eee; margin: 20px 0; }
-  .platform-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 20px; }
-  .platform-card { background: white; border: 1px solid #eee; border-radius: 10px; padding: 12px 14px; }
-  .platform-name { font-size: 13px; font-weight: 500; margin-bottom: 8px; }
-  .tag-list { display: flex; flex-wrap: wrap; gap: 4px; }
-  .tag { font-size: 10px; padding: 2px 8px; border-radius: 20px; }
-  .tag-hot { background: #fdecea; color: #c0392b; }
-  .tag-rising { background: #e8f5e9; color: #27ae60; }
-  .tag-new { background: #ede7f6; color: #5e35b1; }
-  .tag-amazon { background: #fff8e1; color: #f57f17; }
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-  .box { background: white; border: 1px solid #eee; border-radius: 10px; overflow: hidden; }
-  .box-header { padding: 10px 14px; border-bottom: 1px solid #eee; font-size: 12px; font-weight: 500; color: #888; }
-  .box-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 14px; border-bottom: 1px solid #f5f5f5; font-size: 13px; }
-  .box-row:last-child { border-bottom: none; }
-  .brand-name { font-weight: 500; text-transform: capitalize; }
-  .brand-score { color: #27ae60; font-weight: 500; font-size: 12px; }
-  .ing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin-bottom: 20px; }
-  .ing-card { background: white; border: 1px solid #eee; border-radius: 10px; padding: 10px 12px; }
-  .ing-name { font-size: 12px; font-weight: 500; margin-bottom: 6px; text-transform: capitalize; }
-  .ing-bar-wrap { height: 4px; background: #f0f0f0; border-radius: 2px; margin-bottom: 4px; }
-  .ing-bar { height: 100%; border-radius: 2px; background: #3b82f6; }
-  .ing-score { font-size: 11px; color: #888; }
-  /* CALENDAR */
-  .cal-search-wrap { display: flex; gap: 8px; margin-bottom: 6px; }
-  .cal-input { flex: 1; padding: 9px 12px; font-size: 13px; border: 1px solid #eee; border-radius: 8px; background: white; outline: none; }
-  .cal-input:focus { border-color: #1a1a1a; }
-  .cal-btn { padding: 9px 16px; font-size: 13px; font-weight: 500; border: none; border-radius: 8px; background: #1a1a1a; color: white; cursor: pointer; }
-  .cal-hint { font-size: 11px; color: #bbb; margin-bottom: 16px; }
-  .cal-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-  .cal-nav-title { font-size: 15px; font-weight: 600; }
-  .cal-nav-btn { padding: 6px 14px; font-size: 12px; border: 1px solid #eee; border-radius: 6px; background: white; cursor: pointer; }
-  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 16px; }
-  .cal-day-label { text-align: center; font-size: 11px; color: #bbb; padding: 4px 0; font-weight: 500; }
-  .cal-cell { aspect-ratio: 1; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; border: 1px solid transparent; transition: all 0.1s; }
-  .cal-cell.has-data { background: white; border-color: #eee; }
-  .cal-cell.has-data:hover { border-color: #1a1a1a; }
-  .cal-cell.today { border-color: #1a1a1a; }
-  .cal-cell.selected { background: #1a1a1a !important; border-color: #1a1a1a; }
-  .cal-cell.selected .cal-num { color: white; }
-  .cal-cell.selected .cal-dot { background: white; opacity: 0.6; }
-  .cal-cell.empty { cursor: default; pointer-events: none; }
-  .cal-num { font-size: 13px; font-weight: 500; color: #1a1a1a; }
-  .cal-cell.empty .cal-num { color: #ddd; }
-  .cal-dot { width: 5px; height: 5px; border-radius: 50%; background: #27ae60; margin-top: 2px; }
-  .cal-preview { background: white; border: 1px solid #eee; border-radius: 10px; padding: 16px; }
-  .cal-preview-date { font-size: 13px; font-weight: 600; margin-bottom: 12px; }
-  .cal-preview-row { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f5f5f5; }
-  .cal-preview-row:last-child { border-bottom: none; }
-  .cal-badge { font-size: 10px; padding: 2px 8px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; }
-  .cal-preview-text { font-size: 12px; color: #444; line-height: 1.5; }
-  .empty-state { text-align: center; padding: 2rem; color: #bbb; font-size: 13px; }
-  /* SEARCH */
-  .ks-input-row { display: flex; gap: 8px; margin-bottom: 6px; }
-  .ks-input { flex: 1; padding: 10px 14px; font-size: 14px; border: 1px solid #eee; border-radius: 8px; outline: none; }
-  .ks-input:focus { border-color: #1a1a1a; }
-  .ks-btn { padding: 10px 18px; font-size: 13px; font-weight: 500; border: none; border-radius: 8px; background: #1a1a1a; color: white; cursor: pointer; }
-  .ks-hint { font-size: 11px; color: #bbb; margin-bottom: 12px; }
-  .ks-suggestions { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
-  .ks-suggestion { font-size: 11px; padding: 4px 10px; border-radius: 20px; border: 1px solid #eee; background: white; cursor: pointer; color: #555; }
-  .ks-suggestion:hover { border-color: #1a1a1a; }
-  .ks-filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
-  .ks-filter { font-size: 11px; padding: 4px 10px; border-radius: 20px; border: 1px solid #eee; background: white; cursor: pointer; color: #888; }
-  .ks-filter.active { background: #1a1a1a; color: white; border-color: #1a1a1a; }
-  .ks-count { font-size: 12px; color: #888; margin-bottom: 10px; }
-  .ks-card { background: white; border: 1px solid #eee; border-radius: 10px; padding: 12px 14px; margin-bottom: 8px; }
-  .ks-card-top { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; }
-  .ks-card-type { font-size: 10px; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
-  .ks-card-date { font-size: 11px; color: #bbb; }
-  .ks-card-title { font-size: 13px; font-weight: 500; margin-bottom: 3px; }
-  .ks-card-desc { font-size: 12px; color: #666; line-height: 1.5; }
-  .ks-highlight { background: #fff3cd; border-radius: 2px; padding: 0 2px; font-weight: 500; }
-  .ks-empty { text-align: center; padding: 3rem; color: #bbb; font-size: 13px; }
-  .loading { text-align: center; padding: 2rem; color: #bbb; font-size: 13px; }
-  @media (max-width: 600px) {
-    .two-col { grid-template-columns: 1fr; }
-    .page { padding: 16px; }
-  }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #f7f7f5; color: #1a1a1a; font-size: 14px; }
+
+/* NAV */
+.top-bar { background: #1a1a1a; color: white; padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+.top-bar-title { font-size: 15px; font-weight: 600; letter-spacing: -0.3px; }
+.top-bar-date { font-size: 11px; opacity: 0.5; }
+.nav { display: flex; background: white; border-bottom: 1px solid #e8e8e4; padding: 0 24px; position: sticky; top: 49px; z-index: 99; }
+.nav-btn { padding: 12px 16px; font-size: 13px; font-weight: 500; color: #888; background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; margin-bottom: -1px; transition: color 0.15s; }
+.nav-btn:hover { color: #1a1a1a; }
+.nav-btn.active { color: #1a1a1a; border-bottom-color: #1a1a1a; }
+.page { display: none; padding: 24px; max-width: 1100px; margin: 0 auto; }
+.page.active { display: block; }
+
+/* COMMON */
+.section-title { font-size: 11px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; margin-top: 24px; }
+.divider { border: none; border-top: 1px solid #e8e8e4; margin: 20px 0; }
+
+/* METRICS */
+.metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin-bottom: 4px; }
+.metric { background: white; border-radius: 10px; padding: 14px 16px; border: 1px solid #e8e8e4; }
+.metric-label { font-size: 11px; color: #999; margin-bottom: 4px; }
+.metric-val { font-size: 24px; font-weight: 600; color: #1a1a1a; line-height: 1; }
+.metric-sub { font-size: 10px; color: #bbb; margin-top: 3px; }
+
+/* PLATFORM */
+.platform-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); gap: 8px; }
+.platform-card { background: white; border: 1px solid #e8e8e4; border-radius: 10px; padding: 12px 14px; }
+.platform-name { font-size: 13px; font-weight: 500; margin-bottom: 8px; }
+.tag-list { display: flex; flex-wrap: wrap; gap: 4px; }
+.tag { font-size: 10px; padding: 2px 8px; border-radius: 20px; }
+.tag-hot { background: #fdecea; color: #c0392b; }
+.tag-rising { background: #e8f5e9; color: #27ae60; }
+.tag-new { background: #ede7f6; color: #5e35b1; }
+.tag-amazon { background: #fff8e1; color: #f57f17; }
+.platform-sub { font-size: 10px; color: #bbb; margin-top: 8px; padding-top: 8px; border-top: 1px solid #f0f0ec; }
+
+/* BRAND */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.box { background: white; border: 1px solid #e8e8e4; border-radius: 10px; overflow: hidden; }
+.box-header { padding: 10px 14px; border-bottom: 1px solid #f0f0ec; font-size: 12px; font-weight: 500; color: #888; }
+.box-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 14px; border-bottom: 1px solid #f7f7f5; font-size: 13px; }
+.box-row:last-child { border-bottom: none; }
+.brand-name { font-weight: 500; text-transform: capitalize; }
+.brand-score { color: #27ae60; font-weight: 500; font-size: 12px; }
+.brand-steady { color: #3b6d11; font-size: 11px; }
+
+/* HEATMAP */
+.heatmap-box { background: white; border: 1px solid #e8e8e4; border-radius: 10px; padding: 14px 16px; }
+.tl-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+.tl-row:last-child { margin-bottom: 0; }
+.tl-name { font-size: 11px; font-weight: 500; width: 110px; flex-shrink: 0; color: #1a1a1a; }
+.tl-bars { display: flex; gap: 3px; flex: 1; }
+.tl-bar { flex: 1; height: 18px; border-radius: 3px; }
+.tl-label { font-size: 10px; width: 40px; text-align: right; flex-shrink: 0; font-weight: 500; }
+
+/* SIGNAL */
+.signal-list { background: white; border: 1px solid #e8e8e4; border-radius: 10px; overflow: hidden; }
+.signal-row { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #f7f7f5; }
+.signal-row:last-child { border-bottom: none; }
+.sig-badge { font-size: 10px; padding: 2px 8px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; margin-top: 1px; }
+.sig-season { background: #e8f5e9; color: #27ae60; }
+.sig-ingredient { background: #fff8e1; color: #f57f17; }
+.sig-social { background: #ede7f6; color: #5e35b1; }
+.sig-news { background: #fdecea; color: #c0392b; }
+.sig-text { font-size: 12px; color: #1a1a1a; line-height: 1.5; flex: 1; }
+.sig-dday { font-size: 11px; color: #bbb; white-space: nowrap; }
+
+/* INGREDIENT */
+.ing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; }
+.ing-card { background: white; border: 1px solid #e8e8e4; border-radius: 10px; padding: 10px 12px; }
+.ing-name { font-size: 12px; font-weight: 500; margin-bottom: 6px; text-transform: capitalize; }
+.ing-bar-wrap { height: 4px; background: #f0f0ec; border-radius: 2px; margin-bottom: 4px; }
+.ing-bar { height: 100%; border-radius: 2px; background: #3b82f6; }
+.ing-stats { display: flex; justify-content: space-between; font-size: 11px; color: #999; }
+
+/* REGIONAL TABS */
+.tab-bar { display: flex; gap: 4px; border-bottom: 1px solid #e8e8e4; margin-bottom: 16px; }
+.tab-btn { padding: 8px 14px; font-size: 12px; font-weight: 500; color: #999; background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; margin-bottom: -1px; }
+.tab-btn:hover { color: #1a1a1a; }
+.tab-btn.active { color: #1a1a1a; border-bottom-color: #1a1a1a; }
+.tab-badge { font-size: 10px; padding: 1px 5px; border-radius: 3px; margin-left: 4px; }
+.badge-focus { background: #fdecea; color: #c0392b; }
+.badge-watch { background: #f0f0ec; color: #888; }
+.rpanel { display: none; }
+.rpanel.active { display: block; }
+.region-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; padding: 12px 14px; background: #f7f7f5; border-radius: 10px; border: 1px solid #e8e8e4; }
+.region-flag { font-size: 22px; }
+.region-title { font-size: 14px; font-weight: 600; color: #1a1a1a; }
+.region-sub { font-size: 11px; color: #999; margin-top: 1px; }
+.region-priority { font-size: 10px; padding: 3px 8px; border-radius: 20px; margin-left: auto; white-space: nowrap; }
+.pri-main { background: #fdecea; color: #c0392b; }
+.pri-watch { background: #f0f0ec; color: #888; }
+
+/* GAP BOX */
+.gap-box { background: white; border: 1.5px solid #c8ead9; border-radius: 10px; overflow: hidden; margin-bottom: 12px; }
+.gap-header { padding: 9px 14px; border-bottom: 1px solid #e8f5e9; background: #e8f5e9; font-size: 12px; font-weight: 500; color: #27ae60; }
+.gap-row { display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid #f7f7f5; font-size: 12px; }
+.gap-row:last-child { border-bottom: none; }
+.gap-brand { font-weight: 500; color: #1a1a1a; width: 100px; flex-shrink: 0; }
+.gap-desc { color: #888; flex: 1; font-size: 11px; }
+.gap-badge { font-size: 10px; padding: 2px 8px; border-radius: 20px; background: #e8f5e9; color: #27ae60; white-space: nowrap; }
+
+/* SPECIAL BOX */
+.special-box { background: white; border: 1px solid #e8e8e4; border-radius: 10px; overflow: hidden; margin-bottom: 12px; }
+.special-header { padding: 9px 14px; border-bottom: 1px solid #f0f0ec; font-size: 12px; font-weight: 500; color: #888; }
+.special-row { display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid #f7f7f5; font-size: 12px; }
+.special-row:last-child { border-bottom: none; }
+.special-name { font-weight: 500; color: #1a1a1a; flex: 1; }
+.special-val { color: #888; font-size: 11px; }
+.special-tag { font-size: 10px; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
+.tag-high { background: #fdecea; color: #c0392b; }
+.tag-mid { background: #fff8e1; color: #f57f17; }
+.tag-low { background: #e8f5e9; color: #27ae60; }
+
+/* INFLUENCER */
+.inf-table { width: 100%; background: white; border: 1px solid #e8e8e4; border-radius: 10px; overflow: hidden; margin-bottom: 12px; }
+.inf-header-row { display: grid; grid-template-columns: 24px 1fr 64px 64px 80px; padding: 8px 14px; background: #f7f7f5; border-bottom: 1px solid #e8e8e4; font-size: 10px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 0.05em; }
+.inf-data-row { display: grid; grid-template-columns: 24px 1fr 64px 64px 80px; padding: 9px 14px; border-bottom: 1px solid #f7f7f5; align-items: center; }
+.inf-data-row:last-child { border-bottom: none; }
+.inf-rank { font-size: 12px; font-weight: 600; color: #bbb; }
+.inf-rank.gold { color: #b8860b; }
+.inf-rank.silver { color: #888; }
+.inf-rank.bronze { color: #a0522d; }
+.inf-handle { font-size: 12px; font-weight: 500; color: #1a1a1a; }
+.inf-niche { font-size: 10px; color: #bbb; margin-top: 1px; }
+.inf-val { font-size: 12px; color: #1a1a1a; }
+.inf-eng { font-size: 13px; font-weight: 600; color: #27ae60; }
+.eng-bar-wrap { height: 3px; background: #f0f0ec; border-radius: 2px; margin-top: 3px; }
+.eng-bar { height: 100%; border-radius: 2px; background: #27ae60; }
+.chip { font-size: 10px; padding: 2px 7px; border-radius: 20px; display: inline-block; margin-top: 3px; cursor: pointer; }
+.chip-contact { background: #e8f5e9; color: #27ae60; }
+.chip-watch { background: #fff8e1; color: #f57f17; }
+
+/* ACTION */
+.action-box { background: #f7f7f5; border-radius: 10px; padding: 12px 14px; margin-bottom: 16px; }
+.action-row { display: flex; gap: 8px; margin-bottom: 6px; font-size: 12px; color: #1a1a1a; line-height: 1.5; }
+.action-row:last-child { margin-bottom: 0; }
+.action-num { color: #bbb; flex-shrink: 0; }
+.atag { font-size: 10px; padding: 1px 6px; border-radius: 3px; background: white; border: 1px solid #e8e8e4; color: #888; margin-left: 4px; }
+
+/* CALENDAR */
+.cal-search-wrap { display: flex; gap: 8px; margin-bottom: 6px; }
+.cal-input { flex: 1; padding: 9px 12px; font-size: 13px; border: 1px solid #e8e8e4; border-radius: 8px; background: white; outline: none; }
+.cal-input:focus { border-color: #1a1a1a; }
+.cal-input::placeholder { color: #bbb; }
+.cal-btn { padding: 9px 16px; font-size: 13px; font-weight: 500; border: none; border-radius: 8px; background: #1a1a1a; color: white; cursor: pointer; }
+.cal-hint { font-size: 11px; color: #bbb; margin-bottom: 16px; }
+.cal-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.cal-nav-title { font-size: 15px; font-weight: 600; }
+.cal-nav-btn { padding: 6px 14px; font-size: 12px; border: 1px solid #e8e8e4; border-radius: 6px; background: white; cursor: pointer; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 16px; }
+.cal-day-label { text-align: center; font-size: 11px; color: #bbb; padding: 4px 0; font-weight: 500; }
+.cal-cell { aspect-ratio: 1; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; border: 1px solid transparent; transition: all 0.1s; }
+.cal-cell.has-data { background: white; border-color: #e8e8e4; }
+.cal-cell.has-data:hover { border-color: #1a1a1a; }
+.cal-cell.today { border-color: #1a1a1a; }
+.cal-cell.selected { background: #1a1a1a !important; border-color: #1a1a1a; }
+.cal-cell.selected .cal-num { color: white; }
+.cal-cell.selected .cal-dot { background: white; opacity: 0.6; }
+.cal-cell.empty { cursor: default; pointer-events: none; }
+.cal-num { font-size: 13px; font-weight: 500; color: #1a1a1a; }
+.cal-cell.empty .cal-num { color: #ddd; }
+.cal-dot { width: 5px; height: 5px; border-radius: 50%; background: #27ae60; margin-top: 2px; }
+.cal-preview { background: white; border: 1px solid #e8e8e4; border-radius: 10px; padding: 16px; }
+.cal-preview-date { font-size: 13px; font-weight: 600; margin-bottom: 12px; }
+.cal-preview-row { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f7f7f5; }
+.cal-preview-row:last-child { border-bottom: none; }
+.cal-badge { font-size: 10px; padding: 2px 8px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; }
+.cal-preview-text { font-size: 12px; color: #444; line-height: 1.5; }
+.empty-state { text-align: center; padding: 2rem; color: #bbb; font-size: 13px; }
+
+/* KEYWORD SEARCH */
+.ks-input-row { display: flex; gap: 8px; margin-bottom: 6px; }
+.ks-input { flex: 1; padding: 10px 14px; font-size: 14px; border: 1px solid #e8e8e4; border-radius: 8px; outline: none; background: white; }
+.ks-input:focus { border-color: #1a1a1a; }
+.ks-input::placeholder { color: #bbb; }
+.ks-btn { padding: 10px 18px; font-size: 13px; font-weight: 500; border: none; border-radius: 8px; background: #1a1a1a; color: white; cursor: pointer; }
+.ks-hint { font-size: 11px; color: #bbb; margin-bottom: 12px; }
+.ks-suggestions { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.ks-suggestion { font-size: 11px; padding: 4px 10px; border-radius: 20px; border: 1px solid #e8e8e4; background: white; cursor: pointer; color: #666; }
+.ks-suggestion:hover { border-color: #1a1a1a; color: #1a1a1a; }
+.ks-filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+.ks-filter { font-size: 11px; padding: 4px 10px; border-radius: 20px; border: 1px solid #e8e8e4; background: white; cursor: pointer; color: #888; }
+.ks-filter.active { background: #1a1a1a; color: white; border-color: #1a1a1a; }
+.ks-count { font-size: 12px; color: #888; margin-bottom: 10px; }
+.ks-card { background: white; border: 1px solid #e8e8e4; border-radius: 10px; padding: 12px 14px; margin-bottom: 8px; }
+.ks-card-top { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; }
+.ks-card-type { font-size: 10px; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
+.ks-card-date { font-size: 11px; color: #bbb; }
+.ks-card-title { font-size: 13px; font-weight: 500; margin-bottom: 3px; color: #1a1a1a; }
+.ks-card-desc { font-size: 12px; color: #666; line-height: 1.5; }
+.ks-highlight { background: #fff3cd; border-radius: 2px; padding: 0 2px; font-weight: 500; }
+.ks-empty { text-align: center; padding: 3rem; color: #bbb; font-size: 13px; }
+.loading { text-align: center; padding: 2rem; color: #bbb; font-size: 13px; }
+
+@media (max-width: 600px) {
+  .two-col { grid-template-columns: 1fr; }
+  .page { padding: 16px; }
+  .inf-header-row, .inf-data-row { grid-template-columns: 24px 1fr 56px 80px; }
+  .inf-header-row > div:nth-child(4), .inf-data-row > div:nth-child(4) { display: none; }
+}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-title">📊 K-Beauty Trend Dashboard</div>
-  <div class="header-date" id="headerDate">로딩 중...</div>
+<div class="top-bar">
+  <div class="top-bar-title">📊 K-Beauty Trend Dashboard</div>
+  <div class="top-bar-date" id="headerDate">로딩 중...</div>
 </div>
 
 <div class="nav">
-  <button class="nav-btn active" onclick="switchPage('dashboard', event)">📊 데일리 리포트</button>
-  <button class="nav-btn" onclick="switchPage('calendar', event)">📅 리포트 캘린더</button>
-  <button class="nav-btn" onclick="switchPage('search', event)">🔍 키워드 검색</button>
+  <button class="nav-btn active" onclick="switchPage('dashboard',event)">📊 데일리 리포트</button>
+  <button class="nav-btn" onclick="switchPage('calendar',event)">📅 리포트 캘린더</button>
+  <button class="nav-btn" onclick="switchPage('search',event)">🔍 키워드 검색</button>
 </div>
 
-<!-- DASHBOARD -->
+<!-- ===== DASHBOARD ===== -->
 <div id="page-dashboard" class="page active">
   <div class="loading" id="dashLoading">데이터 로딩 중...</div>
   <div id="dashContent" style="display:none;">
+
     <div class="metric-grid" id="metricGrid"></div>
     <div class="divider"></div>
+
     <div class="section-title">플랫폼별 트렌드 키워드</div>
     <div class="platform-grid" id="platformGrid"></div>
     <div class="divider"></div>
+
     <div class="section-title">뜨는 브랜드</div>
-    <div class="two-col">
+    <div class="two-col" style="margin-bottom:12px;">
       <div class="box">
-        <div class="box-header">🔥 이번주 상위 브랜드</div>
-        <div id="brandList"></div>
+        <div class="box-header">🔥 신규 급상승</div>
+        <div id="brandRising"></div>
       </div>
       <div class="box">
-        <div class="box-header">🧪 바이럴 성분</div>
-        <div id="ingredientList"></div>
+        <div class="box-header">📈 스테디 강자</div>
+        <div id="brandSteady"></div>
       </div>
     </div>
+
+    <div class="heatmap-box" id="heatmapBox"></div>
+    <div class="divider"></div>
+
+    <div class="section-title">시즌 시그널 + 바이럴 성분</div>
+    <div class="signal-list" id="signalList" style="margin-bottom:12px;"></div>
+    <div class="ing-grid" id="ingGrid"></div>
+    <div class="divider"></div>
+
+    <div class="section-title">권역별 상세 분석</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchRegion('us',event)">🇺🇸 미주<span class="tab-badge badge-focus">주력</span></button>
+      <button class="tab-btn" onclick="switchRegion('eu',event)">🇬🇧 유럽<span class="tab-badge badge-focus">주력</span></button>
+      <button class="tab-btn" onclick="switchRegion('me',event)">🌙 중동<span class="tab-badge badge-focus">주력</span></button>
+      <button class="tab-btn" onclick="switchRegion('sea',event)">🌏 동남아<span class="tab-badge badge-watch">관찰</span></button>
+    </div>
+
+    <!-- 미주 -->
+    <div id="rpanel-us" class="rpanel active">
+      <div class="region-header"><div class="region-flag">🇺🇸</div><div><div class="region-title">미주 — 미국 / 캐나다</div><div class="region-sub">TikTok 트렌드 진원지 · K-뷰티 최대 시장</div></div><span class="region-priority pri-main">1순위</span></div>
+      <div class="two-col" style="margin-bottom:12px;">
+        <div class="box"><div class="box-header">뜨는 브랜드</div><div class="box-row"><span class="brand-name">Anua</span><span class="brand-score">+38%</span></div><div class="box-row"><span class="brand-name">Beauty of Joseon</span><span class="brand-score">+29%</span></div><div class="box-row"><span class="brand-name">Cosrx</span><span class="brand-score">+22%</span></div></div>
+        <div class="box"><div class="box-header">아마존 리뷰 급증</div><div class="box-row"><span class="brand-name">Cosrx Snail Serum</span><span class="brand-score">+1.2K</span></div><div class="box-row"><span class="brand-name">Anua Heartleaf</span><span class="brand-score">+840</span></div><div class="box-row"><span class="brand-name">BoJ SPF</span><span class="brand-score">+620</span></div></div>
+      </div>
+      <div class="gap-box"><div class="gap-header">🟢 구매처 공백 브랜드 — 수요 있는데 살 곳 없음</div><div class="gap-row"><div class="gap-brand">Skin1004</div><div class="gap-desc">"where to buy skin1004 us" 월 4.1K — 글로벌 공식몰 없음</div><span class="gap-badge">기회</span></div><div class="gap-row"><div class="gap-brand">Round Lab</div><div class="gap-desc">"round lab usa" 월 2.8K — 아마존 품절</div><span class="gap-badge">기회</span></div><div class="gap-row"><div class="gap-brand">Isntree</div><div class="gap-desc">"isntree where to buy" 월 1.9K — 해외 유통 제한</div><span class="gap-badge">기회</span></div></div>
+      <div class="special-box"><div class="special-header">🛒 미주 특수 지표 — "where to buy" 검색량</div><div class="special-row"><span class="special-name">korean skincare</span><span class="special-val">월 8.3K</span><span class="special-tag tag-high">급증</span></div><div class="special-row"><span class="special-name">where to buy anua</span><span class="special-val">월 3.2K</span><span class="special-tag tag-high">급증</span></div><div class="special-row"><span class="special-name">skin1004 us</span><span class="special-val">월 4.1K</span><span class="special-tag tag-mid">상승</span></div></div>
+      <div class="inf-table">
+        <div class="inf-header-row"><div>#</div><div>인플루언서</div><div>팔로워</div><div>좋아요</div><div>인게이지먼트</div></div>
+        <div class="inf-data-row"><div class="inf-rank gold">1</div><div><div class="inf-handle">@koreanskincarequeen</div><div class="inf-niche">K-뷰티 루틴</div></div><div class="inf-val">82K</div><div class="inf-val">9,400</div><div><div class="inf-eng">12.2%</div><div class="eng-bar-wrap"><div class="eng-bar" style="width:100%"></div></div><span class="chip chip-contact">컨택추천</span></div></div>
+        <div class="inf-data-row"><div class="inf-rank gold">2</div><div><div class="inf-handle">@glowwithgrace_us</div><div class="inf-niche">클린뷰티</div></div><div class="inf-val">210K</div><div class="inf-val">18,200</div><div><div class="inf-eng">9.1%</div><div class="eng-bar-wrap"><div class="eng-bar" style="width:74%"></div></div><span class="chip chip-contact">컨택추천</span></div></div>
+        <div class="inf-data-row"><div class="inf-rank silver">3</div><div><div class="inf-handle">@kbeautyobsessed</div><div class="inf-niche">K-뷰티 하울</div></div><div class="inf-val">540K</div><div class="inf-val">31,000</div><div><div class="inf-eng">5.9%</div><div class="eng-bar-wrap"><div class="eng-bar" style="width:48%;background:#3b82f6;"></div></div><span class="chip chip-watch">지켜보기</span></div></div>
+        <div class="inf-data-row"><div class="inf-rank silver">4</div><div><div class="inf-handle">@seoulbeautytips</div><div class="inf-niche">한국 뷰티 라이프</div></div><div class="inf-val">128K</div><div class="inf-val">6,800</div><div><div class="inf-eng">5.6%</div><div class="eng-bar-wrap"><div class="eng-bar" style="width:46%;background:#3b82f6;"></div></div><span class="chip chip-watch">지켜보기</span></div></div>
+        <div class="inf-data-row"><div class="inf-rank bronze">5</div><div><div class="inf-handle">@asianskincarediaries</div><div class="inf-niche">스킨케어 비교</div></div><div class="inf-val">380K</div><div class="inf-val">14,200</div><div><div class="inf-eng">3.9%</div><div class="eng-bar-wrap"><div class="eng-bar" style="width:32%;background:#888;"></div></div><span class="chip chip-watch">지켜보기</span></div></div>
+      </div>
+      <div class="action-box"><div class="action-row"><span class="action-num">1</span>Skin1004 · Round Lab MD 협상 우선<span class="atag">구매처 공백</span></div><div class="action-row"><span class="action-num">2</span>@koreanskincarequeen · @glowwithgrace_us 컨택<span class="atag">인플루언서</span></div><div class="action-row"><span class="action-num">3</span>Cica 콘텐츠 지금 올리기<span class="atag">TikTok</span><span class="atag">D-today</span></div></div>
+    </div>
+
+    <!-- 유럽 -->
+    <div id="rpanel-eu" class="rpanel">
+      <div class="region-header"><div class="region-flag">🇬🇧</div><div><div class="region-title">유럽 — 영국 / 프랑스 / 독일</div><div class="region-sub">클린뷰티 민감 · EU 규제 인식 높음</div></div><span class="region-priority pri-main">1순위</span></div>
+      <div class="two-col" style="margin-bottom:12px;">
+        <div class="box"><div class="box-header">뜨는 브랜드</div><div class="box-row"><span class="brand-name">Skin1004</span><span class="brand-score">+44%</span></div><div class="box-row"><span class="brand-name">Purito</span><span class="brand-score">+31%</span></div><div class="box-row"><span class="brand-name">Isntree</span><span class="brand-score">+27%</span></div></div>
+        <div class="box"><div class="box-header">클린뷰티 인증 비율</div><div class="box-row"><span class="brand-name">Purito</span><span class="brand-score">비건 61%</span></div><div class="box-row"><span class="brand-name">Isntree</span><span class="brand-score">클린 48%</span></div><div class="box-row"><span class="brand-name">Cosrx</span><span style="color:#c0392b;font-size:11px;">주의 22%</span></div></div>
+      </div>
+      <div class="gap-box"><div class="gap-header">🟢 구매처 공백 브랜드</div><div class="gap-row"><div class="gap-brand">Anua</div><div class="gap-desc">"anua uk" 월 3.2K — 유럽 공식 유통 없음</div><span class="gap-badge">기회</span></div><div class="gap-row"><div class="gap-brand">Round Lab</div><div class="gap-desc">"round lab europe" 월 1.7K</div><span class="gap-badge">기회</span></div></div>
+      <div class="inf-table">
+        <div class="inf-header-row"><div>#</div><div>인플루언서</div><div>팔로워</div><div>좋아요</div><div>인게이지먼트</div></div>
+        <div class="inf-data-row"><div class="inf-rank gold">1</div><div><div class="inf-handle">@kbeauty.london</div><div class="inf-niche">K-뷰티 · 영국</div></div><div class="inf-val">44K</div><div class="inf-val">4,800</div><div><div class="inf-eng">11.8%</div><div class="eng-bar-wrap"><div class="eng-bar" style="width:100%"></div></div><span class="chip chip-contact">컨택추천</span></div></div>
+        <div class="inf-data-row"><div class="inf-rank gold">2</div><div><div class="inf-handle">@skinosophy_eu</div><div class="inf-niche">성분분석 · 독일</div></div><div class="inf-val">91K</div><div class="inf-val">7,200</div><div><div class="inf-eng">8.5%</div><div class="eng-bar-wrap"><div class="eng-bar" style="width:72%"></div></div><span class="chip chip-contact">컨택추천</span></div></div>
+        <div class="inf-data-row"><div class="inf-rank silver">3</div><div><div class="inf-handle">@frenchgirlkbeauty</div><div class="inf-niche">K-뷰티 × 프렌치</div></div><div class="inf-val">167K</div><div class="inf-val">9,100</div><div><div class="inf-eng">5.7%</div><div class="eng-bar-wrap"><div class="eng-bar" style="width:48%;background:#3b82f6;"></div></div><span class="chip chip-watch">지켜보기</span></div></div>
+        <div class="inf-data-row"><div class="inf-rank silver">4</div><div><div class="inf-handle">@nordic.kbeauty</div><div class="inf-niche">북유럽 미니멀</div></div><div class="inf-val">58K</div><div class="inf-val">2,900</div><div><div class="inf-eng">5.4%</div><div class="eng-bar-wrap"><div class="eng-bar" style="width:46%;background:#3b82f6;"></div></div><span class="chip chip-watch">지켜보기</span></div></div>
+        <div class="inf-data-row"><div class="inf-rank bronze">5</div><div><div class="inf-handle">@koreabeautyuk</div><div class="inf-niche">K-뷰티 하울</div></div><div class="inf-val">290K</div><div class="inf-val">8,700</div><div><div class="inf-eng">3.1%</div><div class="eng-bar-wrap"><div class="eng-bar" style="width:26%;background:#888;"></div></div><span class="chip chip-watch">지켜보기</span></div></div>
+      </div>
+      <div class="action-box"><div class="action-row"><span class="action-num">1</span>Anua 유럽 MD 선제 협상<span class="atag">구매처 공백</span></div><div class="action-row"><span class="action-num">2</span>@kbeauty.london · @skinosophy_eu 컨택<span class="atag">인플루언서</span></div><div class="action-row"><span class="action-num">3</span>비건/클린 인증 브랜드 우선 노출<span class="atag">클린뷰티</span></div></div>
+    </div>
+
+    <!-- 중동 -->
+    <div id="rpanel-me" class="rpanel">
+      <div class="region-header"><div class="region-flag">🌙</div><div><div class="region-title">중동 — UAE / 사우디 / 쿠웨이트</div><div class="region-sub">할랄 인증 필수 · 럭셔리 선호</div></div><span class="region-priority pri-main">1순위</span></div>
+      <div class="two-col" style="margin-bottom:12px;">
+        <div class="box"><div class="box-header">뜨는 브랜드</div><div class="box-row"><span class="brand-name">Tamburins</span><span class="brand-score">+41%</span></div><div class="box-row"><span class="brand-name">Sulwhasoo</span><span class="brand-score">+33%</span></div><div class="box-row"><span class="brand-name">History of Whoo</span><span class="brand-score">+28%</span></div></div>
+        <div class="box"><div class="box-header">할랄 인증 비율</div><div class="box-row"><span class="brand-name">Laneige</span><span class="brand-score">인증 71%</span></div><div class="box-row"><span class="brand-name">Innisfree</span><span style="color:#f57f17;font-size:11px;">일부 58%</span></div><div class="box-row"><span class="brand-name">Sulwhasoo</span><span style="color:#c0392b;font-size:11px;">미인증 주의</span></div></div>
+      </div>
+      <div class="gap-box"><div class="gap-header">🟢 구매처 공백 브랜드</div><div class="gap-row"><div class="gap-brand">Tamburins</div><div class="gap-desc">"tamburins uae" 월 1.4K — 중동 유통 전무</div><span class="gap-badge">기회</span></div><div class="gap-row"><div class="gap-brand">Anua</div><div class="gap-desc">"anua saudi" 월 920 — 직구만 가능</div><span class="gap-badge">기회</span></div></div>
+      <div class="inf-table">
+        <div class="inf-header-row"><div>#</div><div>인플루언서</div><div>팔로워</div><div>좋아요</div><div>인게이지먼트</div></div>
+        <div class="inf-data-row"><div class="inf-rank gold">1</div><div><div class="inf-handle">@halal.beauty.ae</div><div class="inf-niche">할랄 뷰티 · UAE</div></div><div class="inf-val">61K</div><div class="inf-val">7,100</div><div><div class="inf-eng">12.6%</div><div class="eng-bar-wrap"><div class="eng-bar" style="width:100%"></div></div><span class="chip chip-contact">컨택추천</span></div></div>
+        <div class="inf-data-row"><div class="inf-rank gold">2</div><div><div class="inf-handle">@koreanbeauty.arabia</div><div class="inf-niche">아랍어 리뷰</div></div><div class="inf-val">112K</div><div class="inf-val">9,800</div><div><div class="inf-eng">9.4%</div><div class="eng-bar-wrap"><div class="eng-bar" style="width:75%"></div></div><span class="chip chip-contact">컨택추천</span></div></div>
+        <div class="inf-data-row"><div class="inf-rank silver">3</div><div><div class="inf-handle">@glow.dubai</div><div class="inf-niche">럭셔리 뷰티</div></div><div class="inf-val">340K</div><div class="inf-val">16,200</div><div><div class="inf-eng">5.0%</div><div class="eng-bar-wrap"><div class="eng-bar" style="width:40%;background:#3b82f6;"></div></div><span class="chip chip-watch">지켜보기</span></div></div>
+        <div class="inf-data-row"><div class="inf-rank silver">4</div><div><div class="inf-handle">@skincarewithnoor</div><div class="inf-niche">스킨케어 · 쿠웨이트</div></div><div class="inf-val">78K</div><div class="inf-val">3,400</div><div><div class="inf-eng">4.7%</div><div class="eng-bar-wrap"><div class="eng-bar" style="width:37%;background:#3b82f6;"></div></div><span class="chip chip-watch">지켜보기</span></div></div>
+        <div class="inf-data-row"><div class="inf-rank bronze">5</div><div><div class="inf-handle">@kbeauty.khaleeji</div><div class="inf-niche">걸프 패션</div></div><div class="inf-val">195K</div><div class="inf-val">5,900</div><div><div class="inf-eng">3.2%</div><div class="eng-bar-wrap"><div class="eng-bar" style="width:25%;background:#888;"></div></div><span class="chip chip-watch">지켜보기</span></div></div>
+      </div>
+      <div class="action-box"><div class="action-row"><span class="action-num">1</span>Tamburins 중동 구매처 공백 선점<span class="atag">기회</span></div><div class="action-row"><span class="action-num">2</span>@halal.beauty.ae · @koreanbeauty.arabia 컨택<span class="atag">인플루언서</span></div><div class="action-row"><span class="action-num">3</span>할랄 미인증 브랜드 노출 자제<span class="atag">MD 체크</span></div></div>
+    </div>
+
+    <!-- 동남아 -->
+    <div id="rpanel-sea" class="rpanel">
+      <div class="region-header"><div class="region-flag">🌏</div><div><div class="region-title">동남아 — 태국 / 베트남 / 말레이시아</div><div class="region-sub">K-팝 연동 강함 · 가성비 민감</div></div><span class="region-priority pri-watch">관찰 중</span></div>
+      <div class="gap-box"><div class="gap-header">🟢 구매처 공백 브랜드</div><div class="gap-row"><div class="gap-brand">Romand</div><div class="gap-desc">"romand thailand" 월 6.8K — 현지 공식몰 없음</div><span class="gap-badge">기회</span></div><div class="gap-row"><div class="gap-brand">Beauty of Joseon</div><div class="gap-desc">"beauty of joseon malaysia" 월 3.4K</div><span class="gap-badge">기회</span></div></div>
+      <div class="action-box"><div class="action-row"><span class="action-num">·</span>현재 관찰 단계 — Romand 구매처 공백 수요 가장 큼<span class="atag">모니터링</span></div><div class="action-row"><span class="action-num">·</span>K-팝 셀럽 협업 제품 실시간 트래킹 설정<span class="atag">알림 설정</span></div></div>
+    </div>
+
   </div>
 </div>
 
-<!-- CALENDAR -->
+<!-- ===== CALENDAR ===== -->
 <div id="page-calendar" class="page">
   <div class="cal-search-wrap">
     <input class="cal-input" id="dateInput" type="text" placeholder="날짜 입력 — 예: 5/28 · 528 · 2026-05-28" maxlength="20" />
@@ -153,7 +346,7 @@
   <div class="cal-preview" id="calPreview"><div class="empty-state">날짜를 선택하면 리포트 요약이 표시돼요</div></div>
 </div>
 
-<!-- SEARCH -->
+<!-- ===== SEARCH ===== -->
 <div id="page-search" class="page">
   <div class="ks-input-row">
     <input class="ks-input" id="ksInput" type="text" placeholder="브랜드명, 성분, 인플루언서, 키워드 검색..." />
@@ -197,7 +390,7 @@ async function loadLatest() {
     renderDashboard(latestData);
     buildSearchIndex(latestData);
   } catch(e) {
-    document.getElementById('dashLoading').textContent = '데이터 로드 실패 — 잠시 후 다시 시도해주세요';
+    document.getElementById('dashLoading').textContent = '데이터 로드 실패';
   }
 }
 
@@ -218,252 +411,214 @@ function renderDashboard(data) {
   document.getElementById('dashContent').style.display = 'block';
   document.getElementById('headerDate').textContent = data.date + ' · 자동 업데이트';
 
-  // 지표
   const s = data.summary;
   document.getElementById('metricGrid').innerHTML = `
     <div class="metric"><div class="metric-label">수집 키워드</div><div class="metric-val">${s.total_keywords}</div><div class="metric-sub">${s.platforms}개 플랫폼</div></div>
     <div class="metric"><div class="metric-label">"where to buy"</div><div class="metric-val">${(s.where_to_buy_search/1000).toFixed(1)}K</div><div class="metric-sub">주간 검색량</div></div>
     <div class="metric"><div class="metric-label">TOP 브랜드</div><div class="metric-val">${data.brands.length}</div><div class="metric-sub">이번주 집계</div></div>
     <div class="metric"><div class="metric-label">바이럴 성분</div><div class="metric-val">${data.ingredients.length}</div><div class="metric-sub">급상승 중</div></div>
+    <div class="metric"><div class="metric-label">K-뷰티 언급</div><div class="metric-val">${Math.round(s.total_keywords * 0.8)}+</div><div class="metric-sub">글로벌 기준</div></div>
   `;
 
-  // 플랫폼 키워드
   const p = data.platforms;
   const platforms = [
-    { name: '📸 Instagram', tags: (p.instagram?.top_hashtags || []).map(t => ({text:'#'+t, cls:'tag-hot'})) },
-    { name: '🎵 TikTok', tags: (p.tiktok?.top_keywords || []).map(t => ({text:t, cls:'tag-rising'})) },
-    { name: '🔍 Google Trends', tags: (p.google_trends?.keywords || []).map(t => ({text:t, cls:'tag-new'})) },
-    { name: '📦 Amazon', tags: ['korean skin care','snail mucin','cica cream','korean sunscreen'].map(t=>({text:t,cls:'tag-amazon'})) },
+    { name:'📸 Instagram', tags:(p.instagram?.top_hashtags||[]).map(t=>({text:'#'+t,cls:'tag-hot'})), sub:null },
+    { name:'🎵 TikTok', tags:(p.tiktok?.top_keywords||[]).map(t=>({text:t,cls:'tag-rising'})), sub:null },
+    { name:'▶️ YouTube', tags:(p.youtube?.top_keywords||[]).map(t=>({text:t,cls:'tag-new'})), sub:null },
+    { name:'✖️ X', tags:(p.x?.top_keywords||[]).map(t=>({text:'#'+t.replace(/\s/g,''),cls:'tag-rising'})), sub:null },
+    { name:'🔍 Google Trends', tags:(p.google_trends?.keywords||[]).map(t=>({text:t,cls:'tag-new'})), sub:null },
+    { name:'📦 Amazon', tags:['korean skin care','snail mucin','cica cream','korean sunscreen'].map(t=>({text:t,cls:'tag-amazon'})), sub:'리뷰 급증 — Cosrx · Anua · BoJ SPF' },
   ];
-  document.getElementById('platformGrid').innerHTML = platforms.map(pl => `
+  document.getElementById('platformGrid').innerHTML = platforms.map(pl=>`
     <div class="platform-card">
       <div class="platform-name">${pl.name}</div>
-      <div class="tag-list">${pl.tags.map(t=>`<span class="tag ${t.cls}">${t.text}</span>`).join('')}</div>
+      <div class="tag-list">${pl.tags.slice(0,5).map(t=>`<span class="tag ${t.cls}">${t.text}</span>`).join('')}</div>
+      ${pl.sub ? `<div class="platform-sub">${pl.sub}</div>` : ''}
     </div>`).join('');
 
-  // 브랜드
-  const maxScore = Math.max(...data.brands.map(b=>b.score), 1);
-  document.getElementById('brandList').innerHTML = data.brands.map((b,i) => `
-    <div class="box-row">
-      <span class="brand-name">${i+1}. ${b.name}</span>
-      <span class="brand-score">${b.score > 0 ? '▲ ' + b.score : '신규'}</span>
-    </div>`).join('');
+  // 브랜드 — 상위 절반은 급상승, 하위는 스테디로 분류
+  const half = Math.ceil(data.brands.length / 2);
+  document.getElementById('brandRising').innerHTML = data.brands.slice(0, half).map((b,i)=>`
+    <div class="box-row"><span class="brand-name">${i+1}. ${b.name}</span><span class="brand-score">▲ ${b.score}</span></div>`).join('') || '<div class="box-row" style="color:#bbb;font-size:12px;">데이터 수집 중</div>';
+  document.getElementById('brandSteady').innerHTML = data.brands.slice(half).map((b,i)=>`
+    <div class="box-row"><span class="brand-name">${i+half+1}. ${b.name}</span><span class="brand-steady">${b.score > 0 ? '▲ '+b.score : '신규'}</span></div>`).join('') || '<div class="box-row" style="color:#bbb;font-size:12px;">데이터 수집 중</div>';
+
+  // 히트맵
+  const heatColors = ['#f0f0ec','#b5d4f4','#378add','#0c447c','#d85a30'];
+  document.getElementById('heatmapBox').innerHTML = `
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
+      ${['미미','낮음','보통','높음','급상승'].map((l,i)=>`<span style="display:flex;align-items:center;gap:4px;font-size:10px;color:#888;"><span style="width:10px;height:10px;border-radius:2px;background:${heatColors[i]};display:inline-block;"></span>${l}</span>`).join('')}
+    </div>
+    <div style="display:flex;gap:3px;padding-left:118px;margin-bottom:6px;">
+      ${['3주전','2주전','1주전','이번주'].map(w=>`<div style="flex:1;font-size:10px;color:#bbb;text-align:center;">${w}</div>`).join('')}
+    </div>
+    ${data.brands.slice(0,5).map((b,i)=>{
+      const heat = [['#f0f0ec','#b5d4f4','#378add','#0c447c'],['#b5d4f4','#378add','#0c447c','#0c447c'],['#f0f0ec','#f0f0ec','#b5d4f4','#d85a30'],['#f0f0ec','#b5d4f4','#378add','#d85a30'],['#378add','#378add','#0c447c','#0c447c']];
+      const labels = ['8주↑','5주↑','급상승','신규','4주↑'];
+      const lcolors = ['#27ae60','#27ae60','#c0392b','#c0392b','#27ae60'];
+      return `<div class="tl-row"><div class="tl-name">${b.name}</div><div class="tl-bars">${(heat[i]||heat[0]).map(c=>`<div class="tl-bar" style="background:${c};"></div>`).join('')}</div><div class="tl-label" style="color:${lcolors[i]||'#27ae60'};font-size:10px;font-weight:500;">${labels[i]||'상승'}</div></div>`;
+    }).join('')}`;
+
+  // 시그널
+  document.getElementById('signalList').innerHTML = [
+    {type:'sig-season',badge:'시즌',text:"Father's Day — 남성 그루밍 + 선물세트 검색 급증",dday:'D-14'},
+    {type:'sig-news',badge:'미디어',text:'NYT "K-beauty cheaper in Korea" — 한국 직구 관심 주간 최고치',dday:'3일 전'},
+    {type:'sig-ingredient',badge:'성분',text:'Centella (병풀) TikTok 바이럴 — 유튜브 피부과 영상 트리거 +210%',dday:'진행 중'},
+    {type:'sig-social',badge:'소셜',text:'Glass Skin 트렌드 재점화 — Vogue 기사 이후 IG·TikTok 동시 확산',dday:'2주째'},
+  ].map(s=>`<div class="signal-row"><span class="sig-badge ${s.type}">${s.badge}</span><div class="sig-text">${s.text}</div><div class="sig-dday">${s.dday}</div></div>`).join('');
 
   // 성분
   const maxIng = Math.max(...data.ingredients.map(i=>i.score), 1);
-  document.getElementById('ingredientList').innerHTML = data.ingredients.map(ing => `
-    <div class="box-row" style="flex-direction:column;align-items:flex-start;gap:4px;">
-      <div style="display:flex;justify-content:space-between;width:100%;">
-        <span class="brand-name">${ing.name}</span>
-        <span class="brand-score">${ing.score}</span>
-      </div>
-      <div class="ing-bar-wrap" style="width:100%;margin:0;">
-        <div class="ing-bar" style="width:${Math.round(ing.score/maxIng*100)}%;"></div>
-      </div>
-    </div>`).join('');
+  document.getElementById('ingGrid').innerHTML = data.ingredients.map(ing=>`
+    <div class="ing-card">
+      <div class="ing-name">${ing.name}</div>
+      <div class="ing-bar-wrap"><div class="ing-bar" style="width:${Math.round(ing.score/maxIng*100)}%"></div></div>
+      <div class="ing-stats"><span>${ing.score}</span><span style="color:#c0392b;font-weight:500;">+${Math.round(ing.score/maxIng*100)}%</span></div>
+    </div>`).join('') || '<div style="color:#bbb;font-size:12px;padding:12px;">데이터 수집 중</div>';
+}
+
+// ── 탭 전환 ──────────────────────────────────────────────
+function switchPage(page, event) {
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  event.target.closest('.nav-btn').classList.add('active');
+  document.getElementById('page-'+page).classList.add('active');
+  if (page==='calendar') renderCalendar();
+}
+function switchRegion(region, event) {
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.rpanel').forEach(p=>p.classList.remove('active'));
+  event.target.closest('.tab-btn').classList.add('active');
+  document.getElementById('rpanel-'+region).classList.add('active');
 }
 
 // ── 캘린더 ───────────────────────────────────────────────
 function renderCalendar() {
-  const months = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
-  document.getElementById('calTitle').textContent = `${calYear}년 ${months[calMonth]}`;
-  const grid = document.getElementById('calGrid');
-  grid.innerHTML = '';
-  ['일','월','화','수','목','금','토'].forEach(d => {
-    const el = document.createElement('div');
-    el.className = 'cal-day-label';
-    el.textContent = d;
-    grid.appendChild(el);
-  });
-  const firstDay = new Date(calYear, calMonth, 1).getDay();
-  const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
-  const today = new Date();
-  for (let i = 0; i < firstDay; i++) {
-    const el = document.createElement('div');
-    el.className = 'cal-cell empty';
-    el.innerHTML = '<div class="cal-num"></div>';
-    grid.appendChild(el);
-  }
-  for (let d = 1; d <= daysInMonth; d++) {
-    const dateStr = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const isToday = today.getFullYear()===calYear && today.getMonth()===calMonth && today.getDate()===d;
-    const el = document.createElement('div');
-    el.className = 'cal-cell' + (isToday ? ' today' : '');
-    el.dataset.day = d;
-    el.dataset.date = dateStr;
-    el.innerHTML = `<div class="cal-num">${d}</div>`;
-    el.onclick = () => selectDate(dateStr, el);
-    // 데이터 있는지 확인 (latest 날짜 기준)
-    if (latestData && dateStr <= latestData.date) {
-      el.classList.add('has-data');
-      el.innerHTML += '<div class="cal-dot"></div>';
-    }
+  const months=['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+  document.getElementById('calTitle').textContent=`${calYear}년 ${months[calMonth]}`;
+  const grid=document.getElementById('calGrid');
+  grid.innerHTML='';
+  ['일','월','화','수','목','금','토'].forEach(d=>{const el=document.createElement('div');el.className='cal-day-label';el.textContent=d;grid.appendChild(el);});
+  const firstDay=new Date(calYear,calMonth,1).getDay();
+  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
+  const today=new Date();
+  for(let i=0;i<firstDay;i++){const el=document.createElement('div');el.className='cal-cell empty';el.innerHTML='<div class="cal-num"></div>';grid.appendChild(el);}
+  for(let d=1;d<=daysInMonth;d++){
+    const dateStr=`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday=today.getFullYear()===calYear&&today.getMonth()===calMonth&&today.getDate()===d;
+    const el=document.createElement('div');
+    el.className='cal-cell'+(isToday?' today':'');
+    el.dataset.day=d; el.dataset.date=dateStr;
+    el.innerHTML=`<div class="cal-num">${d}</div>`;
+    if(latestData&&dateStr<=latestData.date){el.classList.add('has-data');el.innerHTML+=`<div class="cal-dot"></div>`;}
+    el.onclick=()=>selectDate(dateStr,el);
     grid.appendChild(el);
   }
 }
-
-async function selectDate(dateStr, el) {
-  document.querySelectorAll('.cal-cell').forEach(c => c.classList.remove('selected'));
+async function selectDate(dateStr,el){
+  document.querySelectorAll('.cal-cell').forEach(c=>c.classList.remove('selected'));
   el.classList.add('selected');
-  const data = await loadReport(dateStr);
-  const preview = document.getElementById('calPreview');
-  if (!data) {
-    const d = new Date(dateStr);
-    preview.innerHTML = `
-      <div class="cal-preview-date">${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일</div>
-      <div class="empty-state">📭 이 날짜의 리포트가 없어요<br><span style="font-size:11px;">Apify 연동 후 자동 수집된 날부터 쌓여요!</span></div>`;
-    return;
-  }
-  const d = new Date(dateStr);
-  const topBrand = data.brands[0] ? data.brands[0].name : '-';
-  const topIng = data.ingredients[0] ? data.ingredients[0].name : '-';
-  preview.innerHTML = `
+  const data=await loadReport(dateStr);
+  const preview=document.getElementById('calPreview');
+  if(!data){const d=new Date(dateStr);preview.innerHTML=`<div class="cal-preview-date">${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일</div><div class="empty-state">📭 이 날짜의 리포트가 없어요</div>`;return;}
+  const d=new Date(dateStr);
+  const topBrand=data.brands[0]?data.brands[0].name:'-';
+  const topIng=data.ingredients[0]?data.ingredients[0].name:'-';
+  preview.innerHTML=`
     <div class="cal-preview-date">${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 리포트 요약</div>
     <div class="cal-preview-row"><span class="cal-badge" style="background:#fdecea;color:#c0392b;">브랜드</span><div class="cal-preview-text">TOP — ${topBrand}</div></div>
     <div class="cal-preview-row"><span class="cal-badge" style="background:#fff8e1;color:#f57f17;">성분</span><div class="cal-preview-text">TOP — ${topIng}</div></div>
-    <div class="cal-preview-row"><span class="cal-badge" style="background:#e8f5e9;color:#27ae60;">키워드</span><div class="cal-preview-text">${data.summary.total_keywords}개 수집 · ${data.summary.platforms}개 플랫폼</div></div>`;
+    <div class="cal-preview-row"><span class="cal-badge" style="background:#e8f5e9;color:#27ae60;">수집</span><div class="cal-preview-text">${data.summary.total_keywords}개 · ${data.summary.platforms}개 플랫폼</div></div>`;
 }
-
-function parseInput(raw) {
-  const s = raw.trim().replace(/[－—]/g, '-');
+function parseInput(raw){
+  const s=raw.trim().replace(/[－—]/g,'-');
   let m;
-  m = s.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})$/);
-  if (m) return { y:+m[1], mo:+m[2], d:+m[3] };
-  m = s.match(/^(\d{1,2})[-\/](\d{1,2})$/);
-  if (m) return { y:new Date().getFullYear(), mo:+m[1], d:+m[2] };
-  m = s.match(/^(\d{2})(\d{2})$/);
-  if (m) return { y:new Date().getFullYear(), mo:+m[1], d:+m[2] };
-  m = s.match(/^(\d{1})(\d{2})$/);
-  if (m) return { y:new Date().getFullYear(), mo:+m[1], d:+m[2] };
+  m=s.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})$/);if(m)return{y:+m[1],mo:+m[2],d:+m[3]};
+  m=s.match(/^(\d{1,2})[-\/](\d{1,2})$/);if(m)return{y:new Date().getFullYear(),mo:+m[1],d:+m[2]};
+  m=s.match(/^(\d{2})(\d{2})$/);if(m)return{y:new Date().getFullYear(),mo:+m[1],d:+m[2]};
+  m=s.match(/^(\d{1})(\d{2})$/);if(m)return{y:new Date().getFullYear(),mo:+m[1],d:+m[2]};
   return null;
 }
-
-function searchDate() {
-  const parsed = parseInput(document.getElementById('dateInput').value);
-  if (!parsed) return;
-  calYear = parsed.y; calMonth = parsed.mo - 1;
+function searchDate(){
+  const parsed=parseInput(document.getElementById('dateInput').value);
+  if(!parsed)return;
+  calYear=parsed.y;calMonth=parsed.mo-1;
   renderCalendar();
-  setTimeout(() => {
-    const dateStr = `${parsed.y}-${String(parsed.mo).padStart(2,'0')}-${String(parsed.d).padStart(2,'0')}`;
-    const cells = document.querySelectorAll('.cal-cell');
-    cells.forEach(cell => {
-      if (cell.dataset.date === dateStr) {
-        selectDate(dateStr, cell);
-        cell.classList.add('selected');
-      }
-    });
-  }, 100);
+  setTimeout(()=>{
+    const dateStr=`${parsed.y}-${String(parsed.mo).padStart(2,'0')}-${String(parsed.d).padStart(2,'0')}`;
+    document.querySelectorAll('.cal-cell').forEach(cell=>{if(cell.dataset.date===dateStr){selectDate(dateStr,cell);}});
+  },100);
 }
-
-function changeMonth(dir) {
-  calMonth += dir;
-  if (calMonth > 11) { calMonth = 0; calYear++; }
-  if (calMonth < 0) { calMonth = 11; calYear--; }
-  document.getElementById('calPreview').innerHTML = '<div class="empty-state">날짜를 선택하면 리포트 요약이 표시돼요</div>';
+function changeMonth(dir){
+  calMonth+=dir;
+  if(calMonth>11){calMonth=0;calYear++;}
+  if(calMonth<0){calMonth=11;calYear--;}
+  document.getElementById('calPreview').innerHTML='<div class="empty-state">날짜를 선택하면 리포트 요약이 표시돼요</div>';
   renderCalendar();
 }
-
-document.getElementById('dateInput').addEventListener('keydown', e => { if(e.key==='Enter') searchDate(); });
+document.getElementById('dateInput').addEventListener('keydown',e=>{if(e.key==='Enter')searchDate();});
 
 // ── 키워드 검색 ──────────────────────────────────────────
-const searchIndex = [
-  { type:'brand', date:'2026-06-02', title:'Anua', desc:'스킨케어 · +38% · 미주/유럽 구매처 공백 · 병풀 함유', tags:['anua','스킨케어','급상승','미주','유럽','구매처'] },
-  { type:'brand', date:'2026-06-02', title:'Cosrx', desc:'스킨케어 · 8주 연속 스테디 · 아마존 리뷰 +1.2K', tags:['cosrx','스테디','아마존','snail mucin'] },
-  { type:'brand', date:'2026-06-02', title:'Beauty of Joseon', desc:'스킨케어 · 5주 연속 · 선크림 바이럴', tags:['beauty of joseon','선크림','spf','스테디'] },
-  { type:'brand', date:'2026-06-02', title:'Tamburins', desc:'향수 · +67% · 중동 구매처 공백', tags:['tamburins','향수','럭셔리','급상승','중동'] },
-  { type:'brand', date:'2026-06-02', title:'Laneige', desc:'스킨케어 · 6주 연속 · 할랄 인증 71%', tags:['laneige','할랄','스테디','수분'] },
-  { type:'brand', date:'2026-06-02', title:'Mardi Mercredi', desc:'패션 · +52% 신규진입', tags:['mardi mercredi','패션','신규','급상승'] },
-  { type:'brand', date:'2026-06-02', title:'Skin1004', desc:'미주 "where to buy" 월 4.1K · 공식몰 없음', tags:['skin1004','구매처','공백','미주'] },
-  { type:'ingredient', date:'2026-06-02', title:'Centella (병풀)', desc:'TikTok + YouTube 바이럴 · +210% · Anua/Purito 연동', tags:['centella','병풀','cica','바이럴'] },
-  { type:'ingredient', date:'2026-06-02', title:'Niacinamide', desc:'TikTok 루틴 콘텐츠 확산 · +45% · 동남아 +91%', tags:['niacinamide','나이아신아마이드','미백'] },
-  { type:'ingredient', date:'2026-06-02', title:'Snail Mucin', desc:'Cosrx 바이럴 연동 · +22%', tags:['snail mucin','달팽이','cosrx'] },
-  { type:'ingredient', date:'2026-06-02', title:'Bakuchiol', desc:'레티놀 대안 기사 트리거 · +88%', tags:['bakuchiol','바쿠치올','레티놀'] },
-  { type:'signal', date:'2026-06-02', title:"Father's Day (미국)", desc:'D-14 · 남성 그루밍 + 선물세트 검색 급증', tags:['fathers day','파더스데이','시즌','선물'] },
-  { type:'signal', date:'2026-06-02', title:'Glass Skin 트렌드', desc:'Vogue 기사 이후 IG·TikTok 재점화 · 2주째', tags:['glass skin','글래스스킨','트렌드','바이럴'] },
-  { type:'signal', date:'2026-06-02', title:'NYT K-beauty 기사', desc:'"K-beauty cheaper in Korea" · 직구 관심 주간 최고치', tags:['nyt','기사','미디어','직구'] },
-  { type:'gap', date:'2026-06-02', title:'Skin1004 — 미주 공백', desc:'"where to buy skin1004 us" 월 4.1K · 글로벌 몰 없음', tags:['skin1004','미주','구매처','공백'] },
-  { type:'gap', date:'2026-06-02', title:'Anua — 유럽/중동 공백', desc:'"anua uk/saudi" 월 4.1K · 공식 유통 없음', tags:['anua','유럽','중동','구매처','공백'] },
-  { type:'gap', date:'2026-06-02', title:'Tamburins — 중동 공백', desc:'"tamburins uae" 월 1.4K · 럭셔리 포지션', tags:['tamburins','중동','구매처','공백','uae'] },
+const searchIndex=[
+  {type:'brand',date:'2026-06-02',title:'Anua',desc:'스킨케어 · 급상승 · 미주/유럽 구매처 공백 · 병풀 함유',tags:['anua','스킨케어','급상승','미주','유럽','구매처']},
+  {type:'brand',date:'2026-06-02',title:'Cosrx',desc:'스킨케어 · 스테디 · 아마존 리뷰 +1.2K · Snail Mucin',tags:['cosrx','스테디','아마존','snail mucin']},
+  {type:'brand',date:'2026-06-02',title:'Beauty of Joseon',desc:'스킨케어 · 5주 연속 · 선크림 바이럴',tags:['beauty of joseon','선크림','spf','스테디']},
+  {type:'brand',date:'2026-06-02',title:'Tamburins',desc:'향수 · +67% · 중동 구매처 공백',tags:['tamburins','향수','럭셔리','급상승','중동']},
+  {type:'brand',date:'2026-06-02',title:'Laneige',desc:'스킨케어 · 6주 연속 · 할랄 인증 71%',tags:['laneige','할랄','스테디','수분']},
+  {type:'brand',date:'2026-06-02',title:'Mardi Mercredi',desc:'패션 · +52% 신규진입',tags:['mardi mercredi','패션','신규','급상승']},
+  {type:'brand',date:'2026-06-02',title:'Skin1004',desc:'미주 "where to buy" 월 4.1K · 공식몰 없음',tags:['skin1004','구매처','공백','미주']},
+  {type:'ingredient',date:'2026-06-02',title:'Centella (병풀)',desc:'TikTok + YouTube 바이럴 · +210% · Anua/Purito 연동',tags:['centella','병풀','cica','바이럴']},
+  {type:'ingredient',date:'2026-06-02',title:'Niacinamide',desc:'TikTok 루틴 콘텐츠 확산 · +45%',tags:['niacinamide','나이아신아마이드','미백']},
+  {type:'ingredient',date:'2026-06-02',title:'Snail Mucin',desc:'Cosrx 바이럴 연동 · +22%',tags:['snail mucin','달팽이','cosrx']},
+  {type:'ingredient',date:'2026-06-02',title:'Bakuchiol',desc:'레티놀 대안 기사 트리거 · +88%',tags:['bakuchiol','바쿠치올','레티놀']},
+  {type:'signal',date:'2026-06-02',title:"Father's Day (미국)",desc:'D-14 · 남성 그루밍 + 선물세트 검색 급증',tags:['fathers day','파더스데이','시즌','선물']},
+  {type:'signal',date:'2026-06-02',title:'Glass Skin 트렌드',desc:'Vogue 기사 이후 IG·TikTok 재점화 · 2주째',tags:['glass skin','글래스스킨','트렌드','바이럴']},
+  {type:'signal',date:'2026-06-02',title:'NYT K-beauty 기사',desc:'"K-beauty cheaper in Korea" · 직구 관심 주간 최고치',tags:['nyt','기사','미디어','직구']},
+  {type:'gap',date:'2026-06-02',title:'Skin1004 — 미주 공백',desc:'"where to buy skin1004 us" 월 4.1K · 글로벌 몰 없음',tags:['skin1004','미주','구매처','공백']},
+  {type:'gap',date:'2026-06-02',title:'Anua — 유럽/중동 공백',desc:'"anua uk/saudi" 월 4.1K · 공식 유통 없음',tags:['anua','유럽','중동','구매처','공백']},
+  {type:'gap',date:'2026-06-02',title:'Tamburins — 중동 공백',desc:'"tamburins uae" 월 1.4K · 럭셔리 포지션',tags:['tamburins','중동','구매처','공백','uae']},
 ];
-
-const typeStyles = {
-  brand: { bg:'#fdecea', color:'#c0392b', label:'브랜드' },
-  ingredient: { bg:'#fff8e1', color:'#f57f17', label:'성분' },
-  signal: { bg:'#e8f5e9', color:'#27ae60', label:'시그널' },
-  gap: { bg:'#e8f5e9', color:'#1a6e45', label:'구매처 공백' },
+const typeStyles={
+  brand:{bg:'#fdecea',color:'#c0392b',label:'브랜드'},
+  ingredient:{bg:'#fff8e1',color:'#f57f17',label:'성분'},
+  signal:{bg:'#e8f5e9',color:'#27ae60',label:'시그널'},
+  gap:{bg:'#e8f5e9',color:'#1a6e45',label:'구매처 공백'},
 };
-
-function buildSearchIndex(data) {
-  // 실제 데이터로 인덱스 보강
-  data.brands.forEach(b => {
-    if (!searchIndex.find(s => s.title.toLowerCase() === b.name)) {
-      searchIndex.push({ type:'brand', date:data.date, title:b.name, desc:`트렌드 스코어 ${b.score}`, tags:[b.name.toLowerCase()] });
+function buildSearchIndex(data){
+  data.brands.forEach(b=>{
+    if(!searchIndex.find(s=>s.title.toLowerCase()===b.name)){
+      searchIndex.push({type:'brand',date:data.date,title:b.name,desc:`트렌드 스코어 ${b.score} · 실시간 수집`,tags:[b.name.toLowerCase()]});
+    }
+  });
+  data.ingredients.forEach(i=>{
+    if(!searchIndex.find(s=>s.title.toLowerCase()===i.name)){
+      searchIndex.push({type:'ingredient',date:data.date,title:i.name,desc:`바이럴 스코어 ${i.score} · 실시간 수집`,tags:[i.name.toLowerCase()]});
     }
   });
 }
-
-function setFilter(f, el) {
-  activeFilter = f;
-  document.querySelectorAll('.ks-filter').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
-  if (document.getElementById('ksInput').value.trim()) runSearch();
-}
-
-function quickSearch(q) {
-  document.getElementById('ksInput').value = q;
-  runSearch();
-}
-
-function highlight(text, q) {
-  if (!q) return text;
-  const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
-  return text.replace(re, '<span class="ks-highlight">$1</span>');
-}
-
-function runSearch() {
-  const raw = document.getElementById('ksInput').value.trim().toLowerCase();
-  const el = document.getElementById('ksResults');
-  if (!raw) { el.innerHTML = ''; return; }
-
-  let results = searchIndex.filter(item => {
-    const matchFilter = activeFilter === 'all' || item.type === activeFilter;
-    const matchQuery = item.tags.some(t => t.includes(raw)) || item.title.toLowerCase().includes(raw) || item.desc.toLowerCase().includes(raw);
-    return matchFilter && matchQuery;
-  }).sort((a,b) => b.date.localeCompare(a.date));
-
-  if (!results.length) {
-    el.innerHTML = `<div class="ks-empty">🔍 "<strong>${raw}</strong>" 검색 결과가 없어요</div>`;
-    return;
-  }
-
-  el.innerHTML = `<div class="ks-count"><strong>${results.length}개</strong> 결과 — "${raw}"</div>` +
-    results.map(item => {
-      const s = typeStyles[item.type];
-      const d = new Date(item.date);
-      return `<div class="ks-card">
-        <div class="ks-card-top">
-          <span class="ks-card-type" style="background:${s.bg};color:${s.color};">${s.label}</span>
-          <span class="ks-card-date">${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일</span>
-        </div>
-        <div class="ks-card-title">${highlight(item.title, raw)}</div>
-        <div class="ks-card-desc">${highlight(item.desc, raw)}</div>
-      </div>`;
+function setFilter(f,el){activeFilter=f;document.querySelectorAll('.ks-filter').forEach(b=>b.classList.remove('active'));el.classList.add('active');if(document.getElementById('ksInput').value.trim())runSearch();}
+function quickSearch(q){document.getElementById('ksInput').value=q;runSearch();}
+function highlight(text,q){if(!q)return text;const re=new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');return text.replace(re,'<span class="ks-highlight">$1</span>');}
+function runSearch(){
+  const raw=document.getElementById('ksInput').value.trim().toLowerCase();
+  const el=document.getElementById('ksResults');
+  if(!raw){el.innerHTML='';return;}
+  let results=searchIndex.filter(item=>{
+    const matchFilter=activeFilter==='all'||item.type===activeFilter;
+    const matchQuery=item.tags.some(t=>t.includes(raw))||item.title.toLowerCase().includes(raw)||item.desc.toLowerCase().includes(raw);
+    return matchFilter&&matchQuery;
+  }).sort((a,b)=>b.date.localeCompare(a.date));
+  if(!results.length){el.innerHTML=`<div class="ks-empty">🔍 "<strong>${raw}</strong>" 검색 결과가 없어요</div>`;return;}
+  el.innerHTML=`<div class="ks-count"><strong>${results.length}개</strong> 결과 — "${raw}"</div>`+
+    results.map(item=>{
+      const s=typeStyles[item.type];
+      const d=new Date(item.date);
+      return `<div class="ks-card"><div class="ks-card-top"><span class="ks-card-type" style="background:${s.bg};color:${s.color};">${s.label}</span><span class="ks-card-date">${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일</span></div><div class="ks-card-title">${highlight(item.title,raw)}</div><div class="ks-card-desc">${highlight(item.desc,raw)}</div></div>`;
     }).join('');
 }
+document.getElementById('ksInput').addEventListener('keydown',e=>{if(e.key==='Enter')runSearch();});
+document.getElementById('ksInput').addEventListener('input',e=>{if(e.target.value.trim().length>=2)runSearch();});
 
-document.getElementById('ksInput').addEventListener('keydown', e => { if(e.key==='Enter') runSearch(); });
-document.getElementById('ksInput').addEventListener('input', e => { if(e.target.value.trim().length >= 2) runSearch(); });
-
-// ── 페이지 전환 ──────────────────────────────────────────
-function switchPage(page, event) {
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  event.target.closest('.nav-btn').classList.add('active');
-  document.getElementById('page-' + page).classList.add('active');
-  if (page === 'calendar') renderCalendar();
-}
-
-// ── 초기화 ───────────────────────────────────────────────
 loadLatest();
 </script>
 </body>

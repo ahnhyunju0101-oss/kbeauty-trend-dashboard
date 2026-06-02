@@ -1,12 +1,13 @@
 import os
 import json
+import time
 import requests
 from datetime import datetime, timezone
 
 APIFY_TOKEN = os.environ.get("APIFY_TOKEN")
 TODAY = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+BASE = "https://api.apify.com/v2"
 
-# ── 키워드 설정 ────────────────────────────────────────────
 INSTAGRAM_HASHTAGS = [
     "kbeauty", "koreanfashion", "koreanskincare",
     "koreanbeauty", "kbeautyhaul", "seoullife"
@@ -29,7 +30,6 @@ GOOGLE_TRENDS_KEYWORDS = [
     "korean skincare", "k-beauty brands", "cica cream",
     "where to buy korean skincare", "korean beauty products"
 ]
-
 BRAND_KEYWORDS = [
     "anua", "cosrx", "laneige", "beauty of joseon", "tamburins",
     "round lab", "skin1004", "mardi mercredi", "sulwhasoo", "innisfree",
@@ -42,13 +42,40 @@ INGREDIENT_KEYWORDS = [
     "retinol", "propolis", "tranexamic acid", "peptide"
 ]
 
-def run_actor(actor_id, input_data, timeout=180, memory=512):
-    url = f"https://api.apify.com/v2/acts/{actor_id}/run-sync-get-dataset-items"
-    params = {"token": APIFY_TOKEN, "timeout": timeout, "memory": memory}
+def run_actor(actor_id, input_data, timeout=120, memory=512):
+    params = {"token": APIFY_TOKEN}
     try:
-        resp = requests.post(url, json=input_data, params=params, timeout=timeout+30)
-        resp.raise_for_status()
-        return resp.json()
+        run_resp = requests.post(
+            f"{BASE}/acts/{actor_id}/runs",
+            json={**input_data, "memory": memory},
+            params=params, timeout=30
+        )
+        run_resp.raise_for_status()
+        run_data = run_resp.json()["data"]
+        run_id = run_data["id"]
+        dataset_id = run_data["defaultDatasetId"]
+
+        for _ in range(timeout // 5):
+            status_resp = requests.get(
+                f"{BASE}/actor-runs/{run_id}",
+                params=params, timeout=10
+            )
+            status = status_resp.json()["data"]["status"]
+            if status in ("SUCCEEDED", "FAILED", "ABORTED", "TIMED-OUT"):
+                break
+            time.sleep(5)
+
+        if status != "SUCCEEDED":
+            print(f"  [SKIP] {actor_id}: status={status}")
+            return []
+
+        items_resp = requests.get(
+            f"{BASE}/datasets/{dataset_id}/items",
+            params={**params, "limit": 50},
+            timeout=30
+        )
+        return items_resp.json()
+
     except Exception as e:
         print(f"  [SKIP] {actor_id}: {e}")
         return []

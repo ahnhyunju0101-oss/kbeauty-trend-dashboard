@@ -1,10 +1,10 @@
 {
   "date": "2026-06-02",
-  "generated_at": "2026-06-02T04:39:56.862953+00:00",
+  "generated_at": "2026-06-02T04:57:40.588573+00:00",
   "summary": {
     "total_keywords": 5,
-    "platforms": 3,
-    "where_to_buy_search": 8300
+    "platforms": 6,
+    "where_to_buy_search": 1000
   },
   "platforms": {
     "instagram": {
@@ -15,14 +15,26 @@
       "total": 0,
       "top_keywords": []
     },
+    "youtube": {
+      "total": 0,
+      "top_keywords": []
+    },
+    "x": {
+      "total": 0,
+      "top_keywords": []
+    },
+    "amazon": {
+      "total": 0,
+      "top_keywords": []
+    },
     "google_trends": {
       "total": 5,
       "keywords": [
         "korean skincare",
         "k-beauty brands",
         "cica cream",
-        "duty free korea",
-        "where to buy korean skincare"
+        "where to buy korean skincare",
+        "korean beauty products"
       ]
     }
   },
@@ -36,6 +48,9 @@
   "raw": {
     "instagram": [],
     "tiktok": [],
+    "youtube": [],
+    "x": [],
+    "amazon": [],
     "google": [
       {
         "platform": "google_trends",
@@ -54,13 +69,13 @@
       },
       {
         "platform": "google_trends",
-        "keyword": "duty free korea",
-        "interest": 1
+        "keyword": "where to buy korean skincare",
+        "interest": 0
       },
       {
         "platform": "google_trends",
-        "keyword": "where to buy korean skincare",
-        "interest": 0
+        "keyword": "korean beauty products",
+        "interest": 3
       }
     ]
   }

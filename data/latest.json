@@ -1,6 +1,6 @@
 {
   "date": "2026-06-02",
-  "generated_at": "2026-06-02T05:14:10.499689+00:00",
+  "generated_at": "2026-06-02T05:19:17.811062+00:00",
   "summary": {
     "total_keywords": 5,
     "platforms": 6,
@@ -55,7 +55,7 @@
       {
         "platform": "google_trends",
         "keyword": "korean skincare",
-        "interest": 54
+        "interest": 53
       },
       {
         "platform": "google_trends",

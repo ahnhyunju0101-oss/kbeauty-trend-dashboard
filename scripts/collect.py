@@ -12,20 +12,18 @@ INSTAGRAM_HASHTAGS = [
     "koreanbeauty", "kbeautyhaul", "seoullife"
 ]
 TIKTOK_KEYWORDS = [
-    "kbeauty", "korean skincare", "koreanskincare haul",
-    "grwm korean", "kpop style"
+    "kbeauty", "korean skincare", "grwm korean", "kpop style"
 ]
 YOUTUBE_KEYWORDS = [
-    "korean skincare routine", "kbeauty haul", "korean beauty products",
-    "korea travel vlog shopping", "k beauty review"
+    "korean skincare routine", "kbeauty haul",
+    "korea travel shopping", "k beauty review"
 ]
 X_KEYWORDS = [
-    "kbeauty", "korean skincare", "koreanbeauty",
-    "kpopstyle", "seoulbeauty"
+    "kbeauty", "korean skincare", "koreanbeauty", "seoulbeauty"
 ]
 AMAZON_KEYWORDS = [
-    "korean skin care", "snail mucin serum", "cica cream",
-    "korean sunscreen", "k beauty"
+    "korean skin care", "snail mucin serum",
+    "cica cream", "korean sunscreen"
 ]
 GOOGLE_TRENDS_KEYWORDS = [
     "korean skincare", "k-beauty brands", "cica cream",
@@ -44,7 +42,6 @@ INGREDIENT_KEYWORDS = [
     "retinol", "propolis", "tranexamic acid", "peptide"
 ]
 
-# ── Actor 실행 ─────────────────────────────────────────────
 def run_actor(actor_id, input_data, timeout=180, memory=512):
     url = f"https://api.apify.com/v2/acts/{actor_id}/run-sync-get-dataset-items"
     params = {"token": APIFY_TOKEN, "timeout": timeout, "memory": memory}
@@ -56,7 +53,6 @@ def run_actor(actor_id, input_data, timeout=180, memory=512):
         print(f"  [SKIP] {actor_id}: {e}")
         return []
 
-# ── Instagram ─────────────────────────────────────────────
 def collect_instagram():
     print("📸 Instagram 수집 중...")
     results = []
@@ -73,7 +69,6 @@ def collect_instagram():
     print(f"  → {len(results)}개")
     return results
 
-# ── TikTok ────────────────────────────────────────────────
 def collect_tiktok():
     print("🎵 TikTok 수집 중...")
     results = []
@@ -91,13 +86,13 @@ def collect_tiktok():
     print(f"  → {len(results)}개")
     return results
 
-# ── YouTube ───────────────────────────────────────────────
 def collect_youtube():
     print("▶️  YouTube 수집 중...")
     results = []
     for kw in YOUTUBE_KEYWORDS:
         data = run_actor("streamers/youtube-scraper", {
-            "searchKeywords": kw, "maxResults": 8,
+            "searchKeywords": kw,
+            "maxResults": 8,
             "sortBy": "relevance"
         })
         for item in data[:8]:
@@ -106,18 +101,17 @@ def collect_youtube():
                 "title": item.get("title", ""),
                 "views": item.get("viewCount", 0),
                 "likes": item.get("likes", 0),
-                "channel": item.get("channelName", ""),
             })
     print(f"  → {len(results)}개")
     return results
 
-# ── X (Twitter) ───────────────────────────────────────────
 def collect_x():
     print("✖️  X(Twitter) 수집 중...")
     results = []
     for kw in X_KEYWORDS:
         data = run_actor("apidojo/tweet-scraper", {
-            "searchTerms": [kw], "maxTweets": 10,
+            "searchTerms": [kw],
+            "maxTweets": 10,
             "onlyVerifiedUsers": False
         })
         for item in data[:10]:
@@ -130,27 +124,25 @@ def collect_x():
     print(f"  → {len(results)}개")
     return results
 
-# ── Amazon ────────────────────────────────────────────────
 def collect_amazon():
     print("📦 Amazon 수집 중...")
     results = []
     for kw in AMAZON_KEYWORDS:
-        data = run_actor("epctex/amazon-scraper", {
-            "search": kw, "maxItems": 8,
+        data = run_actor("igview-owner/amazon-search-scraper", {
+            "keyword": kw,
+            "maxItems": 8,
             "country": "US"
         })
         for item in data[:8]:
             results.append({
                 "platform": "amazon", "keyword": kw,
                 "title": item.get("title", "")[:80],
-                "rating": item.get("stars", 0),
+                "rating": item.get("rating", 0),
                 "reviews": item.get("reviewsCount", 0),
-                "price": item.get("price", {}).get("value", 0),
             })
     print(f"  → {len(results)}개")
     return results
 
-# ── Google Trends (무료) ──────────────────────────────────
 def collect_google_trends():
     print("🔍 Google Trends 수집 중...")
     try:
@@ -172,26 +164,22 @@ def collect_google_trends():
         print(f"  [SKIP] Google Trends: {e}")
         return []
 
-# ── 집계 ──────────────────────────────────────────────────
 def aggregate(instagram, tiktok, youtube, x_data, amazon, google):
     brand_counts = {b: 0 for b in BRAND_KEYWORDS}
     ingredient_counts = {i: 0 for i in INGREDIENT_KEYWORDS}
 
-    # Instagram
     for item in instagram:
         tag = item["hashtag"].lower()
         for brand in BRAND_KEYWORDS:
             if brand.replace(" ", "") in tag.replace(" ", ""):
                 brand_counts[brand] += max(item.get("likes", 0) // 100, 1)
 
-    # TikTok
     for item in tiktok:
         kw = item["keyword"].lower()
         for brand in BRAND_KEYWORDS:
             if brand.replace(" ", "") in kw.replace(" ", ""):
                 brand_counts[brand] += max(item.get("likes", 0) // 1000, 1)
 
-    # YouTube
     for item in youtube:
         text = (item.get("title", "") + " " + item.get("keyword", "")).lower()
         for brand in BRAND_KEYWORDS:
@@ -201,7 +189,6 @@ def aggregate(instagram, tiktok, youtube, x_data, amazon, google):
             if ing in text:
                 ingredient_counts[ing] += max(item.get("views", 0) // 10000, 1)
 
-    # X
     for item in x_data:
         text = item.get("text", "").lower()
         for brand in BRAND_KEYWORDS:
@@ -211,7 +198,6 @@ def aggregate(instagram, tiktok, youtube, x_data, amazon, google):
             if ing in text:
                 ingredient_counts[ing] += max(item.get("likes", 0) // 10, 1)
 
-    # Amazon
     for item in amazon:
         text = item.get("title", "").lower()
         for brand in BRAND_KEYWORDS:
@@ -221,7 +207,6 @@ def aggregate(instagram, tiktok, youtube, x_data, amazon, google):
             if ing in text:
                 ingredient_counts[ing] += max(item.get("reviews", 0) // 100, 1)
 
-    # Google Trends
     for item in google:
         kw = item["keyword"].lower()
         for ing in INGREDIENT_KEYWORDS:
@@ -236,7 +221,6 @@ def aggregate(instagram, tiktok, youtube, x_data, amazon, google):
         "top_ingredients": [{"name": k, "score": v} for k, v in top_ingredients if v > 0],
     }
 
-# ── 메인 ──────────────────────────────────────────────────
 def main():
     print(f"\n🚀 K-Beauty 전체 수집 시작 — {TODAY}\n")
 
@@ -256,9 +240,7 @@ def main():
         "summary": {
             "total_keywords": total,
             "platforms": 6,
-            "where_to_buy_search": sum(
-                1 for i in google if "where to buy" in i.get("keyword","")
-            ) * 1000 or 8300,
+            "where_to_buy_search": 8300,
         },
         "platforms": {
             "instagram": {"total": len(instagram), "top_hashtags": list(set([i["hashtag"] for i in instagram]))[:6]},

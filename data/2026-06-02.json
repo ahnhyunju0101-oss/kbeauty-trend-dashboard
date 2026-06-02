@@ -1,31 +1,56 @@
 {
   "date": "2026-06-02",
-  "generated_at": "2026-06-02T05:19:17.811062+00:00",
+  "generated_at": "2026-06-02T05:36:18.126817+00:00",
   "summary": {
-    "total_keywords": 5,
+    "total_keywords": 207,
     "platforms": 6,
     "where_to_buy_search": 8300
   },
   "platforms": {
     "instagram": {
-      "total": 0,
-      "top_hashtags": []
+      "total": 78,
+      "top_hashtags": [
+        "koreanskincare",
+        "koreanbeauty",
+        "seoullife",
+        "koreanfashion",
+        "kbeautyhaul",
+        "kbeauty"
+      ]
     },
     "tiktok": {
-      "total": 0,
-      "top_keywords": []
+      "total": 40,
+      "top_keywords": [
+        "grwm korean",
+        "korean skincare",
+        "kpop style",
+        "kbeauty"
+      ]
     },
     "youtube": {
-      "total": 0,
-      "top_keywords": []
+      "total": 32,
+      "top_keywords": [
+        "korean skincare routine",
+        "k beauty review",
+        "korea travel shopping",
+        "kbeauty haul"
+      ]
     },
     "x": {
-      "total": 0,
-      "top_keywords": []
+      "total": 20,
+      "top_keywords": [
+        "kbeauty",
+        "seoulbeauty"
+      ]
     },
     "amazon": {
-      "total": 0,
-      "top_keywords": []
+      "total": 32,
+      "top_keywords": [
+        "korean sunscreen",
+        "snail mucin serum",
+        "korean skin care",
+        "cica cream"
+      ]
     },
     "google_trends": {
       "total": 5,
@@ -38,19 +63,855 @@
       ]
     }
   },
-  "brands": [],
+  "brands": [
+    {
+      "name": "cosrx",
+      "score": 26
+    },
+    {
+      "name": "romand",
+      "score": 26
+    },
+    {
+      "name": "etude",
+      "score": 26
+    },
+    {
+      "name": "anua",
+      "score": 1
+    },
+    {
+      "name": "beauty of joseon",
+      "score": 1
+    }
+  ],
   "ingredients": [
     {
       "name": "cica",
-      "score": 12
+      "score": 13
     }
   ],
   "raw": {
-    "instagram": [],
-    "tiktok": [],
-    "youtube": [],
-    "x": [],
-    "amazon": [],
+    "instagram": [
+      {
+        "platform": "instagram",
+        "hashtag": "kbeauty",
+        "likes": 0,
+        "comments": 0
+      },
+      {
+        "platform": "instagram",
+        "hashtag": "kbeauty",
+        "likes": 0,
+        "comments": 0
+      },
+      {
+        "platform": "instagram",
+        "hashtag": "kbeauty",
+        "likes": 0,
+        "comments": 0
+      },
+      {
+        "platform": "instagram",
+        "hashtag": "kbeauty",
+        "likes": 0,
+        "comments": 0
+      },
+      {
+        "platform": "instagram",
+        "hashtag": "kbeauty",
+        "likes": 0,
+        "comments": 0
+      },
+      {
+        "platform": "instagram",
+        "hashtag": "kbeauty",
+        "likes": 0,
+        "comments": 0
+      },
+      {
+        "platform": "instagram",
+        "hashtag": "kbeauty",
+        "likes": -1,
+        "comments": 0
+      },
+      {
+        "platform": "instagram",
+        "hashtag": "kbeauty",
+        "likes": 0,
+        "comments": 0
+      },
+      {
+        "platform": "instagram",
+        "hashtag": "kbeauty",
+        "likes": -1,
+        "comments": 14
+      },
+      {
+        "platform": "instagram",
+        "hashtag": "kbeauty",
+        "likes": 0,
+        "comments": 0
+      },
+      {
+        "platform": "instagram",
+        "hashtag": "kbeauty",
+        "likes": 1,
+        "comments": 1
+      },
+      {
+        "platform": "instagram",
+        "hashtag": "kbeauty",
+        "likes": 1,
+        "comments": 0
+      },
+      {
+        "platform": "instagram",
+        "hashtag": "kbeauty",
+        "likes": 3,
+        "comments": 0
+      },
+      {
+        "platform": "instagram",
+        "hashtag": "kbeauty",
+        "likes": 1,
+        "comments": 0
+      },
+      {
+        "platform": "instagram",
+        "hashtag": "kbeauty",
+        "likes": 0,
+        "comments": 0
+      },
+      {
+        "platform": "instagram",
+        "hashtag": "koreanfashion",
+        "likes": 0,
+        "comments": 0
+      },
+      {
+        "platform": "instagram",
+        "hashtag": "koreanfashion",
+        "likes": 0,
+        "comments": 0
+      },
+      {
+        "platform": "instagram",
+        "hashtag": "koreanfashion",
+        "likes": 0,
+        "comments": 1
+      },
+      {
+        "platform": "instagram",
+        "hashtag": "koreanfashion",
+        "likes": 0,
+        "comments": 0
+      },
+      {
+        "platform": "instagram",
+        "hashtag": "koreanfashion",
+        "likes": 0,
+        "comments": 0
+      },
+      {
+        "platform": "instagram",
+        "hashtag": "koreanfashion",
+        "likes": 0,
+        "comments": 1
+      },
+      {
+        "platform": "instagram",
+        "hashtag": "koreanfashion",
+        "likes": 0,
+        "comments": 0
+      },
+      {
+        "platform": "instagram",
+        "hashtag": "koreanfashion",
+        "likes": 0,
+        "comments": 0
+      },
+      {
+        "platform": "instagram",
+        "hashtag": "koreanfashion",
+        "likes": 0,
+        "comments": 0
+      },
+      {
+        "platform": "instagram",
+        "hashtag": "koreanfashion",
+        "likes": 1,
+        "comments": 0
+      },
+      {
+        "platform": "instagram",
+        "hashtag": "koreanfashion",
+        "likes": 1,
+        "comments": 0
+      },
+      {
+        "platform": "instagram",
+        "hashtag": "koreanfashion",
+        "likes": 0,
+        "comments": 0
+      },
+      {
+        "platform": "instagram",
+        "hashtag": "koreanfashion",
+        "likes": 0,
+        "comments": 0
+      },
+      {
+        "platform": "instagram",
+        "hashtag": "koreanfashion",
+        "likes": 13,
+        "comments": 4
+      },
+      {
+        "platform": "instagram",
+        "hashtag": "koreanfashion",
+        "likes": 0,
+        "comments": 0
+      }
+    ],
+    "tiktok": [
+      {
+        "platform": "tiktok",
+        "keyword": "kbeauty",
+        "plays": 5754,
+        "likes": 486,
+        "shares": 10
+      },
+      {
+        "platform": "tiktok",
+        "keyword": "kbeauty",
+        "plays": 35400,
+        "likes": 3664,
+        "shares": 65
+      },
+      {
+        "platform": "tiktok",
+        "keyword": "kbeauty",
+        "plays": 56200,
+        "likes": 1493,
+        "shares": 69
+      },
+      {
+        "platform": "tiktok",
+        "keyword": "kbeauty",
+        "plays": 19300,
+        "likes": 2152,
+        "shares": 65
+      },
+      {
+        "platform": "tiktok",
+        "keyword": "kbeauty",
+        "plays": 138100,
+        "likes": 5071,
+        "shares": 350
+      },
+      {
+        "platform": "tiktok",
+        "keyword": "kbeauty",
+        "plays": 256300,
+        "likes": 29800,
+        "shares": 310
+      },
+      {
+        "platform": "tiktok",
+        "keyword": "kbeauty",
+        "plays": 30600,
+        "likes": 1751,
+        "shares": 62
+      },
+      {
+        "platform": "tiktok",
+        "keyword": "kbeauty",
+        "plays": 58700,
+        "likes": 6684,
+        "shares": 364
+      },
+      {
+        "platform": "tiktok",
+        "keyword": "kbeauty",
+        "plays": 648000,
+        "likes": 64000,
+        "shares": 8237
+      },
+      {
+        "platform": "tiktok",
+        "keyword": "kbeauty",
+        "plays": 990700,
+        "likes": 113800,
+        "shares": 2827
+      },
+      {
+        "platform": "tiktok",
+        "keyword": "korean skincare",
+        "plays": 2300000,
+        "likes": 35500,
+        "shares": 1705
+      },
+      {
+        "platform": "tiktok",
+        "keyword": "korean skincare",
+        "plays": 2600000,
+        "likes": 245200,
+        "shares": 8919
+      },
+      {
+        "platform": "tiktok",
+        "keyword": "korean skincare",
+        "plays": 219000,
+        "likes": 27600,
+        "shares": 540
+      },
+      {
+        "platform": "tiktok",
+        "keyword": "korean skincare",
+        "plays": 15600,
+        "likes": 1112,
+        "shares": 22
+      },
+      {
+        "platform": "tiktok",
+        "keyword": "korean skincare",
+        "plays": 59500,
+        "likes": 4365,
+        "shares": 69
+      },
+      {
+        "platform": "tiktok",
+        "keyword": "korean skincare",
+        "plays": 391500,
+        "likes": 6698,
+        "shares": 1204
+      },
+      {
+        "platform": "tiktok",
+        "keyword": "korean skincare",
+        "plays": 329200,
+        "likes": 7334,
+        "shares": 187
+      },
+      {
+        "platform": "tiktok",
+        "keyword": "korean skincare",
+        "plays": 344200,
+        "likes": 39700,
+        "shares": 141
+      },
+      {
+        "platform": "tiktok",
+        "keyword": "korean skincare",
+        "plays": 62600,
+        "likes": 2205,
+        "shares": 173
+      },
+      {
+        "platform": "tiktok",
+        "keyword": "korean skincare",
+        "plays": 758200,
+        "likes": 32400,
+        "shares": 3303
+      },
+      {
+        "platform": "tiktok",
+        "keyword": "grwm korean",
+        "plays": 1100000,
+        "likes": 151800,
+        "shares": 1587
+      },
+      {
+        "platform": "tiktok",
+        "keyword": "grwm korean",
+        "plays": 798,
+        "likes": 101,
+        "shares": 4
+      },
+      {
+        "platform": "tiktok",
+        "keyword": "grwm korean",
+        "plays": 15700,
+        "likes": 1920,
+        "shares": 52
+      },
+      {
+        "platform": "tiktok",
+        "keyword": "grwm korean",
+        "plays": 583400,
+        "likes": 64700,
+        "shares": 1118
+      },
+      {
+        "platform": "tiktok",
+        "keyword": "grwm korean",
+        "plays": 580400,
+        "likes": 64200,
+        "shares": 776
+      },
+      {
+        "platform": "tiktok",
+        "keyword": "grwm korean",
+        "plays": 1400000,
+        "likes": 120300,
+        "shares": 702
+      },
+      {
+        "platform": "tiktok",
+        "keyword": "grwm korean",
+        "plays": 6600000,
+        "likes": 686300,
+        "shares": 11800
+      },
+      {
+        "platform": "tiktok",
+        "keyword": "grwm korean",
+        "plays": 151400,
+        "likes": 9639,
+        "shares": 138
+      },
+      {
+        "platform": "tiktok",
+        "keyword": "grwm korean",
+        "plays": 2600000,
+        "likes": 381900,
+        "shares": 3656
+      },
+      {
+        "platform": "tiktok",
+        "keyword": "grwm korean",
+        "plays": 1900000,
+        "likes": 358500,
+        "shares": 3288
+      }
+    ],
+    "youtube": [
+      {
+        "platform": "youtube",
+        "keyword": "korean skincare routine",
+        "title": "My Secret Korean skincare tips for R.E.A.L Glass skin💧",
+        "views": 2175100,
+        "likes": 27000
+      },
+      {
+        "platform": "youtube",
+        "keyword": "korean skincare routine",
+        "title": "*unsponsored* gentle & skin barrier friendly skincare routine! AM & PM routines~",
+        "views": 41224,
+        "likes": 1500
+      },
+      {
+        "platform": "youtube",
+        "keyword": "korean skincare routine",
+        "title": "skincare routine │ korean skincare, glassy + glowy skin, what i use for acne prone skin",
+        "views": 873276,
+        "likes": 24000
+      },
+      {
+        "platform": "youtube",
+        "keyword": "korean skincare routine",
+        "title": "how to get GLASS skin *for beginners* | affordable skincare routine + best korean skincare products",
+        "views": 1030165,
+        "likes": 30000
+      },
+      {
+        "platform": "youtube",
+        "keyword": "korean skincare routine",
+        "title": "MY SIMPLE KOREAN SKINCARE ROUTINE | for combination skin",
+        "views": 355445,
+        "likes": 7300
+      },
+      {
+        "platform": "youtube",
+        "keyword": "korean skincare routine",
+        "title": "Korean skincare products + simple routine for beginners (each skin type)",
+        "views": 1245549,
+        "likes": 39000
+      },
+      {
+        "platform": "youtube",
+        "keyword": "korean skincare routine",
+        "title": "How to: KOREAN 10 Step Skincare Routine | Glass Skin",
+        "views": 5044958,
+        "likes": 95000
+      },
+      {
+        "platform": "youtube",
+        "keyword": "korean skincare routine",
+        "title": "best KOREAN GLASS SKIN routine you've EVER SEEN in your ENTIRE LIFE ( 5 year tested & sponsor-free )",
+        "views": 1890628,
+        "likes": 89000
+      },
+      {
+        "platform": "youtube",
+        "keyword": "kbeauty haul",
+        "title": "KOREA HAUL ♡ what i got from korea | k-beauty, olive young + cute shopping finds 🎀",
+        "views": 3742,
+        "likes": 74
+      },
+      {
+        "platform": "youtube",
+        "keyword": "kbeauty haul",
+        "title": "HUGE K-BEAUTY HAUL 🍀 olive young korea haul!!",
+        "views": 88916,
+        "likes": 2500
+      },
+      {
+        "platform": "youtube",
+        "keyword": "kbeauty haul",
+        "title": "SOUTH KOREA MAKEUP HAUL | Rare K-Beauty Finds You Can't Get Anywhere Else!!",
+        "views": 44879,
+        "likes": 3400
+      },
+      {
+        "platform": "youtube",
+        "keyword": "kbeauty haul",
+        "title": "$300 YESSTYLE k-beauty haul; brand new releases & viral products",
+        "views": 91538,
+        "likes": 3000
+      },
+      {
+        "platform": "youtube",
+        "keyword": "kbeauty haul",
+        "title": "$300 kbeauty haul 🎀 || yesstyle, viral skincare, beauty of joseon unboxing ⋆౨ৎ˚⟡˖",
+        "views": 6961,
+        "likes": 403
+      },
+      {
+        "platform": "youtube",
+        "keyword": "kbeauty haul",
+        "title": "viral KBEAUTY HAUL ft.yesstyle  🎀 it girl essentials *pinterest inspired* cosrx, romand, etude..etc",
+        "views": 262474,
+        "likes": 9600
+      },
+      {
+        "platform": "youtube",
+        "keyword": "kbeauty haul",
+        "title": "KBEAUTY HAUL 🍒💗 new releases from fwee, peripera, lilybyred, colorgram, dasique, etc. at Olive Young",
+        "views": 30430,
+        "likes": 1300
+      },
+      {
+        "platform": "youtube",
+        "keyword": "kbeauty haul",
+        "title": "COME SHOP VIRAL K-BEAUTY AT ULTA! My Best Recommendations + Pointing Out the Award-Winners! 🏆 ✨",
+        "views": 5633,
+        "likes": 228
+      },
+      {
+        "platform": "youtube",
+        "keyword": "korea travel shopping",
+        "title": "KOREA VLOG🍡: shopping, lotte world, eating foods, exploring seoul",
+        "views": 12077,
+        "likes": 424
+      },
+      {
+        "platform": "youtube",
+        "keyword": "korea travel shopping",
+        "title": "3 days in seoul | shopping, getting my makeup done by a k-beauty artist & trying korean snacks ♡",
+        "views": 544243,
+        "likes": 12000
+      },
+      {
+        "platform": "youtube",
+        "keyword": "korea travel shopping",
+        "title": "Must-Buy Korean Souvenirs 🇰🇷 | Korea Shopping Haul Pt.4 – Best Gifts & Travel Finds",
+        "views": 4123,
+        "likes": 81
+      },
+      {
+        "platform": "youtube",
+        "keyword": "korea travel shopping",
+        "title": "Where Cool Girls Shop in Seoul (Korea Shopping Guide)",
+        "views": 69315,
+        "likes": 2100
+      }
+    ],
+    "x": [
+      {
+        "platform": "x",
+        "keyword": "kbeauty",
+        "text": "[Qoo10] PIBUMI センテルーション ナノシカ モイスチャー\nhttps://t.co/aExNQPNbZ2\n#Qoo10 #PIBUMI #Kbeauty #CicaCream #敏感肌\n",
+        "likes": 0,
+        "retweets": 0
+      },
+      {
+        "platform": "x",
+        "keyword": "kbeauty",
+        "text": "This sagging extended into the lower face, contributing to the appearance of jowls and a less define",
+        "likes": 0,
+        "retweets": 0
+      },
+      {
+        "platform": "x",
+        "keyword": "kbeauty",
+        "text": "Prompt: https://t.co/YcY6K5gukB\n\n#WeddingPlanning #BridalHair #WeddingInspiration #AIArt #Generative",
+        "likes": 0,
+        "retweets": 0
+      },
+      {
+        "platform": "x",
+        "keyword": "kbeauty",
+        "text": "Makeup base~~\n\n🌍 Shop worldwide on @yesstyle, @yesstyleinfluencers &amp; @stylekorean_global 💕\nUse m",
+        "likes": 1,
+        "retweets": 0
+      },
+      {
+        "platform": "x",
+        "keyword": "kbeauty",
+        "text": "K-beauty girlies you NEED this ✨ \n Anua's TXA Niacin Blemish Serum  An Olive Young exclusive deal, 2",
+        "likes": 1,
+        "retweets": 0
+      },
+      {
+        "platform": "x",
+        "keyword": "kbeauty",
+        "text": "K‑beauty sunscreens still embarrass Western SPF claims daily. #KBeauty #Skincare",
+        "likes": 0,
+        "retweets": 0
+      },
+      {
+        "platform": "x",
+        "keyword": "kbeauty",
+        "text": "Are Korean pharmacies the next place to shop for true Kbeauty?! I love how traditional pharmacies ar",
+        "likes": 0,
+        "retweets": 0
+      },
+      {
+        "platform": "x",
+        "keyword": "kbeauty",
+        "text": "In Korea, some women have stopped wearing daily makeup — not because they stopped caring, but becaus",
+        "likes": 0,
+        "retweets": 0
+      },
+      {
+        "platform": "x",
+        "keyword": "kbeauty",
+        "text": "Itaewon's beauty scene is one of Seoul's most underestimated — and for international visitors with d",
+        "likes": 0,
+        "retweets": 0
+      },
+      {
+        "platform": "x",
+        "keyword": "kbeauty",
+        "text": "The best Korean plastic surgery clinics treat international patients differently — in all the right ",
+        "likes": 0,
+        "retweets": 0
+      },
+      {
+        "platform": "x",
+        "keyword": "seoulbeauty",
+        "text": "Unlock your best skin! ✨ Get personalized K-beauty guidance &amp; smart shopping tips from an expert",
+        "likes": 0,
+        "retweets": 0
+      },
+      {
+        "platform": "x",
+        "keyword": "seoulbeauty",
+        "text": "Get ready for stunning volume! 🌿\n\nThe Build Perm on sleek dark brown hair adds depth and bounce, enh",
+        "likes": 0,
+        "retweets": 0
+      },
+      {
+        "platform": "x",
+        "keyword": "seoulbeauty",
+        "text": "Confused by K-beauty? Get expert guidance in Myeongdong! Learn skincare secrets, shop smart at Olive",
+        "likes": 0,
+        "retweets": 0
+      },
+      {
+        "platform": "x",
+        "keyword": "seoulbeauty",
+        "text": "Subtle volume. Perfect balance. Natural results. 💎✨\n\nUnlock your best profile with our Korean Filler",
+        "likes": 1,
+        "retweets": 0
+      },
+      {
+        "platform": "x",
+        "keyword": "seoulbeauty",
+        "text": "Ready for an effortless body transformation?\nOur WellnessFit Special Event is officially LIVE. 🕊✨\n\n🔹",
+        "likes": 1,
+        "retweets": 0
+      },
+      {
+        "platform": "x",
+        "keyword": "seoulbeauty",
+        "text": "Achieve a swish-worthy look with our Layered Perm in Choco Brown! Ideal for round or rectangular fac",
+        "likes": 0,
+        "retweets": 0
+      },
+      {
+        "platform": "x",
+        "keyword": "seoulbeauty",
+        "text": "Did you know Seoul is known as the plastic surgery capital of the world? \n\n#SeoulBeauty #KBeauty #Pl",
+        "likes": 0,
+        "retweets": 0
+      },
+      {
+        "platform": "x",
+        "keyword": "seoulbeauty",
+        "text": "Get inspired by this graceful Wave Perm!\n\nThe subtle layers create lovely movement, ideal for heart ",
+        "likes": 0,
+        "retweets": 0
+      },
+      {
+        "platform": "x",
+        "keyword": "seoulbeauty",
+        "text": "Craving that airy lift? 🌬️\n\nOur Air Perm in dark chocolate tones offers volume and lightness, perfec",
+        "likes": 0,
+        "retweets": 0
+      },
+      {
+        "platform": "x",
+        "keyword": "seoulbeauty",
+        "text": "Thinking about rhinoplasty? ✨\nIt’s not just about making your nose smaller — balance, structure, and",
+        "likes": 0,
+        "retweets": 0
+      }
+    ],
+    "amazon": [
+      {
+        "platform": "amazon",
+        "keyword": "korean skin care",
+        "title": "",
+        "rating": 0,
+        "reviews": 0
+      },
+      {
+        "platform": "amazon",
+        "keyword": "korean skin care",
+        "title": "",
+        "rating": 0,
+        "reviews": 0
+      },
+      {
+        "platform": "amazon",
+        "keyword": "korean skin care",
+        "title": "",
+        "rating": 0,
+        "reviews": 0
+      },
+      {
+        "platform": "amazon",
+        "keyword": "korean skin care",
+        "title": "",
+        "rating": 0,
+        "reviews": 0
+      },
+      {
+        "platform": "amazon",
+        "keyword": "korean skin care",
+        "title": "",
+        "rating": 0,
+        "reviews": 0
+      },
+      {
+        "platform": "amazon",
+        "keyword": "korean skin care",
+        "title": "",
+        "rating": 0,
+        "reviews": 0
+      },
+      {
+        "platform": "amazon",
+        "keyword": "korean skin care",
+        "title": "",
+        "rating": 0,
+        "reviews": 0
+      },
+      {
+        "platform": "amazon",
+        "keyword": "korean skin care",
+        "title": "",
+        "rating": 0,
+        "reviews": 0
+      },
+      {
+        "platform": "amazon",
+        "keyword": "snail mucin serum",
+        "title": "",
+        "rating": 0,
+        "reviews": 0
+      },
+      {
+        "platform": "amazon",
+        "keyword": "snail mucin serum",
+        "title": "",
+        "rating": 0,
+        "reviews": 0
+      },
+      {
+        "platform": "amazon",
+        "keyword": "snail mucin serum",
+        "title": "",
+        "rating": 0,
+        "reviews": 0
+      },
+      {
+        "platform": "amazon",
+        "keyword": "snail mucin serum",
+        "title": "",
+        "rating": 0,
+        "reviews": 0
+      },
+      {
+        "platform": "amazon",
+        "keyword": "snail mucin serum",
+        "title": "",
+        "rating": 0,
+        "reviews": 0
+      },
+      {
+        "platform": "amazon",
+        "keyword": "snail mucin serum",
+        "title": "",
+        "rating": 0,
+        "reviews": 0
+      },
+      {
+        "platform": "amazon",
+        "keyword": "snail mucin serum",
+        "title": "",
+        "rating": 0,
+        "reviews": 0
+      },
+      {
+        "platform": "amazon",
+        "keyword": "snail mucin serum",
+        "title": "",
+        "rating": 0,
+        "reviews": 0
+      },
+      {
+        "platform": "amazon",
+        "keyword": "cica cream",
+        "title": "",
+        "rating": 0,
+        "reviews": 0
+      },
+      {
+        "platform": "amazon",
+        "keyword": "cica cream",
+        "title": "",
+        "rating": 0,
+        "reviews": 0
+      },
+      {
+        "platform": "amazon",
+        "keyword": "cica cream",
+        "title": "",
+        "rating": 0,
+        "reviews": 0
+      },
+      {
+        "platform": "amazon",
+        "keyword": "cica cream",
+        "title": "",
+        "rating": 0,
+        "reviews": 0
+      }
+    ],
     "google": [
       {
         "platform": "google_trends",

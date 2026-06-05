@@ -528,7 +528,17 @@ async function selectDate(dateStr,el){
     <div class="cal-preview-date">${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 리포트 요약</div>
     <div class="cal-preview-row"><span class="cal-badge" style="background:#fdecea;color:#c0392b;">브랜드</span><div class="cal-preview-text">TOP — ${topBrand}</div></div>
     <div class="cal-preview-row"><span class="cal-badge" style="background:#fff8e1;color:#f57f17;">성분</span><div class="cal-preview-text">TOP — ${topIng}</div></div>
-    <div class="cal-preview-row"><span class="cal-badge" style="background:#e8f5e9;color:#27ae60;">수집</span><div class="cal-preview-text">${data.summary.total_keywords}개 · ${data.summary.platforms}개 플랫폼</div></div>`;
+    <div class="cal-preview-row"><span class="cal-badge" style="background:#e8f5e9;color:#27ae60;">수집</span><div class="cal-preview-text">${data.summary.total_keywords}개 · ${data.summary.platforms}개 플랫폼</div></div>     <div style="margin-top:10px;"><button onclick="loadDateReport('${dateStr}')" style="font-size:12px;padding:6px 14px;border-radius:6px;background:#1a1a1a;color:white;border:none;cursor:pointer;">전체 리포트 보기 →</button></div>`;
+}
+  function loadDateReport(dateStr){
+  if(reportCache[dateStr]){
+    document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.querySelectorAll('.nav-btn')[0].classList.add('active');
+    document.getElementById('page-dashboard').classList.add('active');
+    latestData=reportCache[dateStr];
+    renderDashboard(reportCache[dateStr]);
+  }
 }
 function parseInput(raw){
   const s=raw.trim().replace(/[－—]/g,'-');

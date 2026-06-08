@@ -1,9 +1,9 @@
 {
   "date": "2026-06-08",
-  "generated_at": "2026-06-08T04:44:01.839493+00:00",
+  "generated_at": "2026-06-08T13:08:26.005430+00:00",
   "summary": {
-    "total_keywords": 5,
-    "platforms": 6,
+    "total_keywords": 0,
+    "platforms": 2,
     "where_to_buy_search": 8300
   },
   "platforms": {
@@ -28,55 +28,14 @@
       "top_keywords": []
     },
     "google_trends": {
-      "total": 5,
-      "keywords": [
-        "korean skincare",
-        "k-beauty brands",
-        "cica cream",
-        "where to buy korean skincare",
-        "korean beauty products"
-      ]
+      "total": 0,
+      "keywords": []
     }
   },
   "brands": [],
-  "ingredients": [
-    {
-      "name": "cica",
-      "score": 16
-    }
-  ],
+  "ingredients": [],
   "raw": {
     "instagram": [],
-    "tiktok": [],
-    "youtube": [],
-    "x": [],
-    "amazon": [],
-    "google": [
-      {
-        "platform": "google_trends",
-        "keyword": "korean skincare",
-        "interest": 64
-      },
-      {
-        "platform": "google_trends",
-        "keyword": "k-beauty brands",
-        "interest": 1
-      },
-      {
-        "platform": "google_trends",
-        "keyword": "cica cream",
-        "interest": 16
-      },
-      {
-        "platform": "google_trends",
-        "keyword": "where to buy korean skincare",
-        "interest": 0
-      },
-      {
-        "platform": "google_trends",
-        "keyword": "korean beauty products",
-        "interest": 3
-      }
-    ]
+    "google": []
   }
 }
